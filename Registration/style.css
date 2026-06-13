@@ -1,0 +1,263 @@
+:root {
+    --primary-green: #2d5a27;
+    --primary-hover: #23471e;
+    --accent-orange: #e05314;
+    --input-bg: #d9d9d9;
+    --text-color: #333333;
+    --placeholder-color: #8c8c8c;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('../assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+}
+
+/* ============================================
+   System Alerts / Flash Messages
+   ============================================ */
+.alert {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ============================================
+   Auth Wrapper Card
+   ============================================ */
+.auth-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    border-radius: 40px;
+    padding: 40px 35px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ============================================
+   Navigation Tabs
+   ============================================ */
+.auth-tabs {
+    display: flex;
+    width: 100%;
+    max-width: 340px;
+    border-bottom: 1px solid #b3b3b3;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--placeholder-color);
+    cursor: pointer;
+    text-align: center;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: var(--primary-green);
+    font-weight: 700;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 15%;
+    width: 70%;
+    height: 2px;
+    background-color: var(--primary-green);
+}
+
+/* ============================================
+   Branding / Logo
+   ============================================ */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.brand-logo img {
+    height: 60px;
+    width: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+/* ============================================
+   Form Title
+   ============================================ */
+.form-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* ============================================
+   Form Visibility
+   ============================================ */
+.auth-form {
+    width: 100%;
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+/* ============================================
+   Form Grid Layout
+   ============================================ */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* ============================================
+   Input Fields
+   ============================================ */
+.input-field {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: none;
+    border-radius: 20px;
+    padding: 14px 20px;
+    font-size: 15px;
+    color: var(--text-color);
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.input-field::placeholder {
+    color: var(--placeholder-color);
+}
+
+.input-field:focus {
+    background-color: #cecece;
+}
+
+/* ============================================
+   Select / Dropdown Field
+   ============================================ */
+.select-field {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238c8c8c' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 10px;
+    cursor: pointer;
+}
+
+.select-field option[value=""] {
+    color: var(--placeholder-color);
+}
+
+.spacer {
+    margin-top: 15px;
+}
+
+/* ============================================
+   Remember Me
+   ============================================ */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    color: var(--placeholder-color);
+    font-size: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember-me input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-green);
+    cursor: pointer;
+}
+
+/* ============================================
+   Submit Button
+   ============================================ */
+.submit-btn {
+    width: 100%;
+    background-color: var(--primary-green);
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 15px;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 480px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .full-width {
+        grid-column: span 1;
+    }
+    .auth-container {
+        padding: 30px 20px;
+        border-radius: 30px;
+    }
+}
