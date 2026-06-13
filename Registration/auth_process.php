@@ -61,11 +61,10 @@ if ($action === 'signup') {
         exit();
     }
 
-    // Hash password
+    // Hash password and insert
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
-    // Insert user
     $mname_val = !empty($mname) ? "'$mname'" : "NULL";
+
     $sql = "INSERT INTO tblusers (fname, mname, lname, gender, cellphone_no, barangay, city, email, password)
             VALUES ('$fname', $mname_val, '$lname', '$gender', '$cellphone_no', '$barangay', '$city', '$email', '$hashed_password')";
 
@@ -109,14 +108,14 @@ elseif ($action === 'login') {
         exit();
     }
 
-    // Set session and go to homepage
+    // Set session — then go to dashboard at root
     unset($_SESSION['form_data'], $_SESSION['active_tab']);
     $_SESSION['user_id']    = $user['user_id'];
     $_SESSION['user_fname'] = $user['fname'];
     $_SESSION['user_lname'] = $user['lname'];
     $_SESSION['user_email'] = $user['email'];
 
-    header("Location: ../index.php");
+    header("Location: ../index.php"); // ← goes up to root
     exit();
 }
 

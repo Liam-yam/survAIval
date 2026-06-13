@@ -70,10 +70,10 @@ $date_today = date('l, F j, Y');
                     <a href="index.php"><i class="bi bi-house-fill"></i> Home</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-exclamation-triangle-fill"></i> Report Incidents</a>
+                    <a href="Report_Incidents/report_incidents.php"><i class="bi bi-exclamation-triangle-fill"></i> Report Incidents</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-clock-history"></i> My Reports</a>
+                    <a href="My_Reports/my_reports.php"><i class="bi bi-clock-history"></i> My Reports</a>
                 </li>
                 <li>
                     <a href="#"><i class="bi bi-geo-alt-fill"></i> Incident Map</a>
@@ -96,7 +96,7 @@ $date_today = date('l, F j, Y');
 
         <!-- Logout -->
         <div class="sidebar-logout">
-            <a href="Registration/logout.php"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
 
     </aside>
