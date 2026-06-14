@@ -142,7 +142,7 @@ $hotline_groups = [
             <ul>
                 <li><a href="../Announcement/announcement.php"><i class="bi bi-megaphone-fill"></i> Announcement</a></li>
                 <li class="active"><a href="hotlines.php"><i class="bi bi-telephone-fill"></i> Hotlines</a></li>
-                <li><a href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+                <li><a href="../Settings/settings.php"><i class="bi bi-gear-fill"></i> Settings</a></li>
             </ul>
         </nav>
         <div class="sidebar-logout">
