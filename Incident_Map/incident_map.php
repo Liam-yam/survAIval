@@ -126,13 +126,13 @@ function getStatusClass($status) {
             <p class="nav-label">INFORMATION</p>
             <ul>
                 <li>
-                    <a href="#"><i class="bi bi-megaphone-fill"></i> Announcement</a>
+                    <a href="../Announcements/announcements.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-telephone-fill"></i> Hotlines</a>
+                    <a href="../Hotlines/hotlines.php"><i class="bi bi-telephone-fill"></i> Hotlines</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-gear-fill"></i> Settings</a>
+                    <a href="../Settings/settings.php"><i class="bi bi-gear-fill"></i> Settings</a>
                 </li>
             </ul>
         </nav>

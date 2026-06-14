@@ -1,0 +1,340 @@
+:root {
+    --primary-green:  #2d5a27;
+    --primary-hover:  #23471e;
+    --accent-orange:  #e05314;
+    --sidebar-bg:     #95CA99;
+    --sidebar-active: #2d5a27;
+    --main-bg:        #f2f2f2;
+    --card-bg:        #ffffff;
+    --text-dark:      #1a1a1a;
+    --text-muted:     #6b6b6b;
+    --border:         #e8e8e8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+    width: 260px; min-height: 100vh;
+    background-color: var(--sidebar-bg);
+    display: flex; flex-direction: column;
+    padding: 25px 20px;
+    position: fixed; top: 0; left: 0; bottom: 0;
+}
+
+.sidebar-logo img { height: 50px; width: auto; margin-bottom: 25px; }
+
+.user-card {
+    background-color: var(--primary-green);
+    border-radius: 16px; padding: 18px;
+    margin-bottom: 30px; color: #fff;
+}
+
+.user-name     { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+.user-role     { font-size: 13px; opacity: 0.85; margin-bottom: 8px; }
+.user-location { font-size: 13px; opacity: 0.85; display: flex; align-items: center; gap: 5px; }
+
+.nav-label {
+    font-size: 11px; font-weight: 600;
+    color: var(--primary-green);
+    letter-spacing: 0.8px; margin: 18px 0 8px 10px;
+}
+
+.sidebar-nav ul { list-style: none; }
+
+.sidebar-nav ul li a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: 10px;
+    font-size: 15px; font-weight: 500;
+    color: var(--primary-green); text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.sidebar-nav ul li a i     { font-size: 17px; }
+.sidebar-nav ul li a:hover { background-color: rgba(255,255,255,0.4); }
+
+.sidebar-nav ul li.active a {
+    background-color: var(--sidebar-active);
+    color: #fff; font-weight: 700;
+}
+
+.sidebar-logout {
+    margin-top: auto;
+    border-top: 1px solid rgba(45,90,39,0.25);
+    padding-top: 18px;
+}
+
+.sidebar-logout a {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 500;
+    color: var(--primary-green); text-decoration: none;
+    padding: 10px 14px; border-radius: 10px;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main-content { margin-left: 260px; flex: 1; padding: 30px 35px; }
+
+.top-header {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 20px;
+}
+
+.header-subtitle { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.header-date     { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+.header-actions  { display: flex; align-items: center; gap: 14px; }
+
+.sos-btn {
+    background-color: #c0392b; color: #fff;
+    border: none; border-radius: 10px;
+    padding: 12px 28px; font-size: 18px; font-weight: 800;
+    cursor: pointer; letter-spacing: 1px; transition: background-color 0.2s;
+}
+.sos-btn:hover { background-color: #a93226; }
+
+.notif-btn {
+    background: none; border: none;
+    font-size: 24px; color: var(--text-dark);
+    cursor: pointer; transition: color 0.2s;
+}
+.notif-btn:hover { color: var(--primary-green); }
+
+.page-title {
+    font-size: 32px; font-weight: 800;
+    color: var(--primary-green); margin-bottom: 18px;
+}
+
+/* ============================================
+   SEARCH BAR
+   ============================================ */
+.search-wrap {
+    display: flex; align-items: center; gap: 10px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 18px;
+    max-width: 380px;
+}
+
+.search-wrap i { font-size: 16px; color: var(--text-muted); }
+
+.search-input {
+    border: none; outline: none;
+    font-size: 14px; color: var(--text-dark);
+    width: 100%; background: transparent;
+}
+
+.search-input::placeholder { color: var(--text-muted); }
+
+/* ============================================
+   HOTLINES CARD
+   ============================================ */
+.hotlines-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px 35px;
+}
+
+.section-label {
+    font-size: 15px; font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 8px;
+}
+
+.group-divider {
+    border-top: 2px dashed var(--border);
+    margin: 20px 0;
+}
+
+.group-divider:last-child { display: none; }
+
+/* ============================================
+   HOTLINE LIST
+   ============================================ */
+.hotline-list { display: flex; flex-direction: column; }
+
+.hotline-row {
+    display: flex; align-items: center; gap: 18px;
+    padding: 18px 12px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 12px;
+    transition: background-color 0.2s;
+}
+
+.hotline-row:last-child  { border-bottom: none; }
+.hotline-row:hover       { background-color: #f5fbf5; }
+.hotline-row.hidden      { display: none; }
+
+/* Icon */
+.hotline-icon {
+    width: 46px; height: 46px;
+    background-color: #e8f5e9;
+    border-radius: 12px;
+    display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+}
+.hotline-icon i { font-size: 20px; color: var(--primary-green); }
+
+/* Info */
+.hotline-info { flex: 1; }
+
+.hotline-name {
+    font-size: 15px; font-weight: 600;
+    color: var(--text-dark); margin-bottom: 5px;
+}
+
+.hotline-meta {
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap;
+}
+
+.hotline-subtitle { font-size: 12px; color: var(--text-muted); }
+
+/* Status dot + text */
+.status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%; flex-shrink: 0;
+}
+.status-dot.status-active { background-color: #27a060; }
+.status-dot.status-office { background-color: #e07000; }
+
+.status-text { font-size: 11px; font-weight: 600; }
+.status-text.active { color: #27a060; }
+.status-text.office { color: #e07000; }
+
+/* Right: Number + Buttons */
+.hotline-right {
+    display: flex; align-items: center;
+    gap: 10px; flex-shrink: 0;
+}
+
+.hotline-number {
+    font-size: 15px; font-weight: 700;
+    color: var(--primary-green);
+    min-width: 140px; text-align: right;
+}
+
+/* Copy Button */
+.copy-btn {
+    width: 38px; height: 38px;
+    background-color: #f0f7ee;
+    color: var(--primary-green);
+    border: 1px solid #c8dfc5;
+    border-radius: 8px; font-size: 16px;
+    display: flex; align-items: center;
+    justify-content: center; cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+.copy-btn:hover       { background-color: #d6ecd2; }
+.copy-btn.copied i    { color: #27a060; }
+
+/* Call Button */
+.call-btn {
+    width: 42px; height: 42px;
+    background-color: var(--primary-green);
+    color: #fff; border: none;
+    border-radius: 10px; font-size: 18px;
+    display: flex; align-items: center;
+    justify-content: center; cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    flex-shrink: 0; text-decoration: none;
+}
+.call-btn:hover { background-color: var(--primary-hover); transform: scale(1.05); }
+
+/* ============================================
+   NO RESULTS
+   ============================================ */
+.no-results {
+    text-align: center; padding: 40px;
+    color: var(--text-muted); display: none;
+}
+.no-results i { font-size: 36px; display: block; margin-bottom: 10px; }
+
+/* ============================================
+   CALL CONFIRM MODAL
+   ============================================ */
+.modal-overlay {
+    display: none; position: fixed;
+    inset: 0; background-color: rgba(0,0,0,0.4); z-index: 100;
+}
+
+.modal {
+    display: none; position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px; background-color: #fff;
+    border-radius: 20px; z-index: 101;
+    padding: 32px 28px; text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-overlay.open,
+.modal.open { display: block; }
+
+.modal-icon {
+    width: 64px; height: 64px;
+    background-color: #e8f5e9; border-radius: 50%;
+    display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 16px;
+}
+.modal-icon i { font-size: 28px; color: var(--primary-green); }
+
+.modal-title  { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+.modal-number { font-size: 22px; font-weight: 800; color: var(--primary-green); margin-bottom: 10px; }
+.modal-msg    { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+.modal-actions { display: flex; gap: 12px; }
+
+.btn-cancel {
+    flex: 1; padding: 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: none;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-muted); cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-cancel:hover { background-color: #f0f0f0; }
+
+.btn-call {
+    flex: 1; padding: 12px; border-radius: 10px;
+    background-color: var(--primary-green); color: #fff;
+    font-size: 14px; font-weight: 700;
+    text-decoration: none;
+    display: flex; align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+.btn-call:hover { background-color: var(--primary-hover); }
+
+/* ============================================
+   COPY TOAST NOTIFICATION
+   ============================================ */
+.toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%);
+    background-color: #2d5a27; color: #fff;
+    padding: 12px 24px; border-radius: 30px;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 200;
+}
+.toast.show { opacity: 1; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .sidebar      { display: none; }
+    .main-content { margin-left: 0; padding: 20px; }
+    .hotline-number { min-width: unset; font-size: 13px; }
+}
