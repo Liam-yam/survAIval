@@ -69,7 +69,7 @@ $date_today = date('l, F j, Y');
                     <a href="../My_Reports/my_reports.php"><i class="bi bi-clock-history"></i> My Reports</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-geo-alt-fill"></i> Incident Map</a>
+                    <a href="../Incident_Map/incident_map.php"><i class="bi bi-geo-alt-fill"></i> Incident Map</a>
                 </li>
             </ul>
 

@@ -13,49 +13,49 @@ $user_fname = $_SESSION['user_fname'];
 $user_lname = $_SESSION['user_lname'];
 
 // Filter by status
-$filter        = $_GET['filter'] ?? 'all';
+$filter        = $_GET['status'] ?? 'all';
 $date_today    = date('l, F j, Y');
 
-$where = "WHERE user_id = '$user_id' AND status != 'draft'";
+// Build query based on filter
 if ($filter !== 'all') {
     $filter_safe = mysqli_real_escape_string($conn, $filter);
-    $where .= " AND status = '$filter_safe'";
+    $sql = "SELECT * FROM tblreports WHERE user_id = '$user_id' AND status = '$filter_safe' ORDER BY created_at DESC";
+} else {
+    $sql = "SELECT * FROM tblreports WHERE user_id = '$user_id' AND status != 'draft' ORDER BY created_at DESC";
 }
 
-$result  = mysqli_query($conn, "SELECT * FROM tblreports $where ORDER BY created_at DESC");
+$result  = mysqli_query($conn, $sql);
 $reports = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $reports[] = $row;
 }
 
-// Label mapping: DB value → UI label
-function statusLabel($status) {
-    $map = [
-        'pending'    => 'Reported',
-        'responding' => 'Responding',
-        'resolved'   => 'Resolved',
-    ];
-    return $map[$status] ?? ucfirst($status);
+// UI label + dot color mapping
+function getStatusLabel($status) {
+    switch ($status) {
+        case 'pending':    return 'Reported';
+        case 'responding': return 'Responding';
+        case 'resolved':   return 'Resolved';
+        default:           return ucfirst($status);
+    }
 }
 
-// Dot color per status
-function statusDot($status) {
-    $map = [
-        'pending'    => 'dot-red',
-        'responding' => 'dot-orange',
-        'resolved'   => 'dot-green',
-    ];
-    return $map[$status] ?? 'dot-gray';
+function getStatusClass($status) {
+    switch ($status) {
+        case 'pending':    return 'status-reported';
+        case 'responding': return 'status-responding';
+        case 'resolved':   return 'status-resolved';
+        default:           return '';
+    }
 }
 
-// Badge class per status
-function statusBadge($status) {
-    $map = [
-        'pending'    => 'badge-reported',
-        'responding' => 'badge-responding',
-        'resolved'   => 'badge-resolved',
-    ];
-    return $map[$status] ?? '';
+function getDotClass($status) {
+    switch ($status) {
+        case 'pending':    return 'dot-red';
+        case 'responding': return 'dot-orange';
+        case 'resolved':   return 'dot-green';
+        default:           return '';
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -97,10 +97,10 @@ function statusBadge($status) {
                     <a href="../Report_Incidents/report_incidents.php"><i class="bi bi-exclamation-triangle-fill"></i> Report Incidents</a>
                 </li>
                 <li class="active">
-                    <a href="my_reports.php"><i class="bi bi-clock-history"></i> My Reports</a>
+                    <a href="../My_Reports/my_reports.php"><i class="bi bi-clock-history"></i> My Reports</a>
                 </li>
                 <li>
-                    <a href="#"><i class="bi bi-geo-alt-fill"></i> Incident Map</a>
+                    <a href="../Incident_Map/incident_map.php"><i class="bi bi-geo-alt-fill"></i> Incident Map</a>
                 </li>
             </ul>
 
@@ -144,27 +144,33 @@ function statusBadge($status) {
         <!-- Page Title -->
         <h1 class="page-title">My Reports</h1>
 
-        <!-- Reports Card -->
+        <!-- Report List Card -->
         <div class="reports-card">
 
-            <!-- Card Header -->
-            <div class="card-header">
-                <p class="card-label">Review</p>
-                <div class="filter-wrapper">
-                    <button class="filter-btn" id="filterBtn">
-                        <i class="bi bi-funnel"></i> Filter
-                    </button>
-                    <!-- Filter Dropdown -->
-                    <div class="filter-dropdown" id="filterDropdown">
-                        <a href="my_reports.php?filter=all"        class="<?php echo $filter === 'all'        ? 'active' : ''; ?>">All</a>
-                        <a href="my_reports.php?filter=pending"    class="<?php echo $filter === 'pending'    ? 'active' : ''; ?>">Reported</a>
-                        <a href="my_reports.php?filter=responding" class="<?php echo $filter === 'responding' ? 'active' : ''; ?>">Responding</a>
-                        <a href="my_reports.php?filter=resolved"   class="<?php echo $filter === 'resolved'   ? 'active' : ''; ?>">Resolved</a>
-                    </div>
+            <!-- Card Header: Label + Filter -->
+            <div class="card-header-row">
+                <p class="review-label">Review</p>
+                <div class="filter-group">
+                    <a href="my_reports.php"
+                       class="filter-btn <?php echo $filter === 'all'        ? 'active' : ''; ?>">
+                        All
+                    </a>
+                    <a href="my_reports.php?status=pending"
+                       class="filter-btn <?php echo $filter === 'pending'    ? 'active' : ''; ?>">
+                        Reported
+                    </a>
+                    <a href="my_reports.php?status=responding"
+                       class="filter-btn <?php echo $filter === 'responding' ? 'active' : ''; ?>">
+                        Responding
+                    </a>
+                    <a href="my_reports.php?status=resolved"
+                       class="filter-btn <?php echo $filter === 'resolved'   ? 'active' : ''; ?>">
+                        Resolved
+                    </a>
                 </div>
             </div>
 
-            <!-- Report List -->
+            <!-- Scrollable Report List -->
             <div class="report-list">
                 <?php if (empty($reports)): ?>
                     <div class="no-reports">
@@ -175,30 +181,34 @@ function statusBadge($status) {
                     <?php foreach ($reports as $report): ?>
                         <div class="report-row">
 
-                            <span class="dot <?php echo statusDot($report['status']); ?>"></span>
-
-                            <div class="report-info">
-                                <p class="report-title"><?php echo htmlspecialchars($report['incident_title']); ?></p>
-                                <p class="report-loc">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <?php echo htmlspecialchars($report['location']); ?>
-                                </p>
+                            <!-- Dot + Info -->
+                            <div class="report-left">
+                                <span class="dot <?php echo getDotClass($report['status']); ?>"></span>
+                                <div class="report-info">
+                                    <p class="report-title"><?php echo htmlspecialchars($report['incident_title']); ?></p>
+                                    <p class="report-location">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <?php echo htmlspecialchars($report['location']); ?>
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="report-center">
-                                <span class="badge <?php echo statusBadge($report['status']); ?>">
-                                    <?php echo statusLabel($report['status']); ?>
-                                </span>
-                                <p class="report-time">
-                                    <?php echo date('M j, g:i A', strtotime($report['created_at'])); ?>
-                                </p>
+                            <!-- Status + Date + Eye -->
+                            <div class="report-right">
+                                <div class="report-status-col">
+                                    <span class="status-badge <?php echo getStatusClass($report['status']); ?>">
+                                        <?php echo getStatusLabel($report['status']); ?>
+                                    </span>
+                                    <p class="report-date">
+                                        <?php echo date('M j, g:i A', strtotime($report['created_at'])); ?>
+                                    </p>
+                                </div>
+                                <button class="eye-btn"
+                                        onclick="openModal(<?php echo htmlspecialchars(json_encode($report)); ?>)"
+                                        title="View details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
-
-                            <!-- Eye icon — opens modal -->
-                            <button class="eye-btn"
-                                onclick="openModal(<?php echo htmlspecialchars(json_encode($report)); ?>)">
-                                <i class="bi bi-eye"></i>
-                            </button>
 
                         </div>
                     <?php endforeach; ?>
@@ -213,68 +223,64 @@ function statusBadge($status) {
     <!-- REPORT DETAIL MODAL              -->
     <!-- ================================ -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-    <div class="modal" id="reportModal">
 
+    <div class="modal" id="reportModal">
         <div class="modal-header">
-            <h3 id="modalTitle">Report Details</h3>
+            <h3 id="modalTitle">—</h3>
             <button onclick="closeModal()"><i class="bi bi-x-lg"></i></button>
         </div>
-
         <div class="modal-body">
 
-            <!-- Report Info -->
-            <div class="modal-info-grid">
-                <div>
-                    <p class="modal-label">Incident Type</p>
-                    <p class="modal-value" id="modalType">—</p>
+            <!-- Details -->
+            <div class="modal-details">
+                <div class="detail-row">
+                    <span class="detail-label"><i class="bi bi-tag-fill"></i> Type</span>
+                    <span id="modalType">—</span>
                 </div>
-                <div>
-                    <p class="modal-label">Location</p>
-                    <p class="modal-value" id="modalLocation">—</p>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="bi bi-geo-alt-fill"></i> Location</span>
+                    <span id="modalLocation">—</span>
                 </div>
-                <div>
-                    <p class="modal-label">Reporter</p>
-                    <p class="modal-value" id="modalReporter">—</p>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="bi bi-person-fill"></i> Reporter</span>
+                    <span id="modalReporter">—</span>
                 </div>
-                <div>
-                    <p class="modal-label">Contact</p>
-                    <p class="modal-value" id="modalContact">—</p>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="bi bi-telephone-fill"></i> Contact</span>
+                    <span id="modalContact">—</span>
                 </div>
-            </div>
-
-            <div class="modal-desc-group">
-                <p class="modal-label">Description</p>
-                <p class="modal-value" id="modalDesc">—</p>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="bi bi-card-text"></i> Description</span>
+                    <span id="modalDescription">—</span>
+                </div>
             </div>
 
             <!-- Photo -->
-            <div id="modalPhotoWrap" style="display:none;">
-                <p class="modal-label">Photo</p>
-                <img id="modalPhoto" src="" alt="Report Photo" class="modal-photo">
+            <div id="modalPhotoWrap" class="modal-photo-wrap" style="display:none;">
+                <p class="detail-label"><i class="bi bi-image"></i> Photo</p>
+                <img id="modalPhoto" src="" alt="Incident Photo">
             </div>
 
             <!-- Status Tracker -->
             <div class="status-tracker">
-                <p class="modal-label">Status Tracker</p>
+                <p class="tracker-title">Status Tracker</p>
                 <div class="tracker-steps">
 
                     <div class="tracker-step" id="step-reported">
-                        <span class="tracker-dot"></span>
-                        <span class="tracker-label">Reported</span>
+                        <div class="step-dot"></div>
+                        <div class="step-line"></div>
+                        <p>Reported</p>
                     </div>
-
-                    <div class="tracker-line" id="line-responding"></div>
 
                     <div class="tracker-step" id="step-responding">
-                        <span class="tracker-dot"></span>
-                        <span class="tracker-label">Responding</span>
+                        <div class="step-dot"></div>
+                        <div class="step-line"></div>
+                        <p>Responding</p>
                     </div>
 
-                    <div class="tracker-line" id="line-resolved"></div>
-
                     <div class="tracker-step" id="step-resolved">
-                        <span class="tracker-dot"></span>
-                        <span class="tracker-label">Resolved</span>
+                        <div class="step-dot"></div>
+                        <p>Resolved</p>
                     </div>
 
                 </div>
