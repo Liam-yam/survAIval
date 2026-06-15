@@ -1,16 +1,18 @@
 <?php
 session_start();
 
-// Redirect to login if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: Registration/registration.php");
     exit();
 }
 
-// Get user info from session
-$user_fname = $_SESSION['user_fname'];
-$user_lname = $_SESSION['user_lname'];
-$user_email = $_SESSION['user_email'];
+require_once 'Registration/db.php';
+
+$user_id       = $_SESSION['user_id'];
+$user_fname    = $_SESSION['user_fname'];
+$user_lname    = $_SESSION['user_lname'];
+$user_barangay = $_SESSION['user_barangay'];
+$user_city     = $_SESSION['user_city'];
 
 // Greeting based on time
 $hour = (int) date('H');
@@ -24,6 +26,46 @@ if ($hour < 12) {
 
 // Current date display
 $date_today = date('l, F j, Y');
+
+// Recent incident reports from DB
+$reports_result = mysqli_query($conn, "
+    SELECT * FROM tblreports
+    WHERE user_id = '$user_id' AND status != 'draft'
+    ORDER BY created_at DESC
+    LIMIT 5
+");
+$recent_reports = [];
+while ($row = mysqli_fetch_assoc($reports_result)) {
+    $recent_reports[] = $row;
+}
+
+// Status label + badge class
+function getStatusLabel($status) {
+    switch ($status) {
+        case 'pending':    return 'Reported';
+        case 'responding': return 'Responding';
+        case 'resolved':   return 'Resolved';
+        default:           return ucfirst($status);
+    }
+}
+
+function getStatusClass($status) {
+    switch ($status) {
+        case 'pending':    return 'badge-reported';
+        case 'responding': return 'badge-responding';
+        case 'resolved':   return 'badge-resolved';
+        default:           return '';
+    }
+}
+
+function getDotClass($status) {
+    switch ($status) {
+        case 'pending':    return 'dot-red';
+        case 'responding': return 'dot-orange';
+        case 'resolved':   return 'dot-green';
+        default:           return '';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +74,6 @@ $date_today = date('l, F j, Y');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>survAIval - Dashboard</title>
-    <link rel="icon" type="image/png" href="<?php echo 'assets/logo-s.svg'; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -47,22 +88,19 @@ $date_today = date('l, F j, Y');
     <!-- ================================ -->
     <aside class="sidebar">
 
-        <!-- Logo -->
         <div class="sidebar-logo">
             <img src="assets/logo.svg" alt="survAIval Logo">
         </div>
 
-        <!-- User Card -->
         <div class="user-card">
             <p class="user-name"><?php echo $user_fname . ' ' . $user_lname; ?></p>
-            <p class="user-role">Resident | Purok 8</p>
+            <p class="user-role">Resident</p>
             <p class="user-location">
                 <i class="bi bi-geo-alt-fill"></i>
-                <?php echo $user_fname; ?>'s Barangay
+                <?php echo $user_barangay . ' - ' . $user_city; ?>
             </p>
         </div>
 
-        <!-- Menu -->
         <nav class="sidebar-nav">
             <p class="nav-label">MENU</p>
             <ul>
@@ -83,7 +121,7 @@ $date_today = date('l, F j, Y');
             <p class="nav-label">INFORMATION</p>
             <ul>
                 <li>
-                    <a href="Announcements/announcements.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
+                    <a href="Announcement/announcement.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
                 </li>
                 <li>
                     <a href="Hotlines/hotlines.php"><i class="bi bi-telephone-fill"></i> Hotlines</a>
@@ -94,7 +132,6 @@ $date_today = date('l, F j, Y');
             </ul>
         </nav>
 
-        <!-- Logout -->
         <div class="sidebar-logout">
             <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
@@ -110,7 +147,7 @@ $date_today = date('l, F j, Y');
         <div class="top-header">
             <div class="header-greeting">
                 <h1><?php echo $greeting . ', ' . $user_fname; ?></h1>
-                <p><?php echo $date_today; ?> — Brgy. San Pablo - Sto. Tomas City</p>
+                <p><?php echo $date_today; ?> — Brgy. <?php echo $user_barangay; ?> - <?php echo $user_city; ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>
@@ -128,25 +165,25 @@ $date_today = date('l, F j, Y');
         <p class="section-label">REPORT AN EMERGENCY</p>
         <div class="emergency-grid">
 
-            <div class="emergency-card fire">
+            <a href="Report_Incidents/report_incidents.php?type=Fire" class="emergency-card fire">
                 <img src="assets/Fire.svg" alt="Fire">
                 <p>Tap to report</p>
-            </div>
+            </a>
 
-            <div class="emergency-card flood">
+            <a href="Report_Incidents/report_incidents.php?type=Flood" class="emergency-card flood">
                 <img src="assets/Vector.svg" alt="Flood">
                 <p>Tap to report</p>
-            </div>
+            </a>
 
-            <div class="emergency-card alert">
-                <img src="assets/Police.svg" alt="Alert">
+            <a href="Report_Incidents/report_incidents.php?type=Crime" class="emergency-card alert">
+                <img src="assets/Police.svg" alt="Crime">
                 <p>Tap to report</p>
-            </div>
+            </a>
 
-            <div class="emergency-card medical">
+            <a href="Report_Incidents/report_incidents.php?type=Medical" class="emergency-card medical">
                 <img src="assets/Medical.svg" alt="Medical">
                 <p>Tap to report</p>
-            </div>
+            </a>
 
         </div>
 
@@ -159,45 +196,37 @@ $date_today = date('l, F j, Y');
                     <i class="bi bi-list-ul"></i> My incident reports
                 </h2>
 
-                <div class="report-item">
-                    <span class="dot dot-orange"></span>
-                    <div class="report-info">
-                        <p class="report-name">Flooding — Purok 3 road</p>
-                        <p class="report-loc"><i class="bi bi-geo-alt"></i> Near barangay hall</p>
+                <?php if (empty($recent_reports)): ?>
+                    <div class="no-reports">
+                        <i class="bi bi-inbox"></i>
+                        <p>No reports submitted yet.</p>
                     </div>
-                    <div class="report-right">
-                        <span class="badge badge-responding">Responding</span>
-                        <p class="report-time">Today, 7:42 AM</p>
-                    </div>
-                </div>
-
-                <div class="report-item">
-                    <span class="dot dot-green"></span>
-                    <div class="report-info">
-                        <p class="report-name">Fallen tree — Main road</p>
-                        <p class="report-loc"><i class="bi bi-geo-alt"></i> Brgy. boundary</p>
-                    </div>
-                    <div class="report-right">
-                        <span class="badge badge-resolved">Resolved</span>
-                        <p class="report-time">June 7, 4:18 PM</p>
-                    </div>
-                </div>
-
-                <div class="report-item">
-                    <span class="dot dot-red"></span>
-                    <div class="report-info">
-                        <p class="report-name">Fire — abandoned house</p>
-                        <p class="report-loc"><i class="bi bi-geo-alt"></i> Sitio Malaya</p>
-                    </div>
-                    <div class="report-right">
-                        <span class="badge badge-pending">Pending</span>
-                        <p class="report-time">June 6, 9:05 PM</p>
-                    </div>
-                </div>
+                <?php else: ?>
+                    <?php foreach ($recent_reports as $report): ?>
+                        <div class="report-item">
+                            <span class="dot <?php echo getDotClass($report['status']); ?>"></span>
+                            <div class="report-info">
+                                <p class="report-name"><?php echo htmlspecialchars($report['incident_title']); ?></p>
+                                <p class="report-loc">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <?php echo htmlspecialchars($report['location']); ?>
+                                </p>
+                            </div>
+                            <div class="report-right">
+                                <span class="badge <?php echo getStatusClass($report['status']); ?>">
+                                    <?php echo getStatusLabel($report['status']); ?>
+                                </span>
+                                <p class="report-time">
+                                    <?php echo date('M j, g:i A', strtotime($report['created_at'])); ?>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
 
             </div>
 
-            <!-- Announcements -->
+            <!-- Announcements (hardcoded until admin is built) -->
             <div class="card">
                 <h2 class="card-title">
                     <i class="bi bi-megaphone-fill"></i> Announcements

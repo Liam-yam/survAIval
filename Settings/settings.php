@@ -29,6 +29,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>survAIval - Settings</title>
+    <link rel="icon" type="image/png" href="<?php echo '../assets/logo-s.svg'; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -190,7 +191,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
         <div class="settings-card">
             <p class="card-label">SECURITY</p>
 
-            <a href="../Settings/Profile/Password/change_password.php" class="settings-row">
+            <a href="../Settings/Password/change_password.php" class="settings-row">
                 <div class="row-left">
                     <div class="row-icon"><i class="bi bi-lock-fill"></i></div>
                     <div class="row-info">

@@ -24,6 +24,23 @@ while ($row = mysqli_fetch_assoc($draft_result)) {
     $drafts[] = $row;
 }
 
+// Pre-fill from dashboard emergency card click
+$prefill_titles = [
+    'Fire'    => 'Fire Incident',
+    'Flood'   => 'Flood Incident',
+    'Crime'   => 'Crime Incident',
+    'Medical' => 'Medical Emergency',
+];
+
+$allowed_types = ['Fire', 'Flood', 'Crime', 'Medical'];
+$prefill_type  = '';
+$prefill_title = '';
+
+if (isset($_GET['type']) && in_array($_GET['type'], $allowed_types)) {
+    $prefill_type  = $_GET['type'];
+    $prefill_title = $prefill_titles[$prefill_type];
+}
+
 // Current date
 $date_today = date('l, F j, Y');
 ?>
@@ -33,6 +50,7 @@ $date_today = date('l, F j, Y');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>survAIval - Report Incidents</title>
+    <link rel="icon" type="image/png" href="<?php echo '../assets/logo-s.svg'; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -139,7 +157,7 @@ $date_today = date('l, F j, Y');
 
                 <!-- Hidden: draft ID for updating existing draft -->
                 <input type="hidden" name="report_id" id="report_id" value="">
-                <input type="hidden" name="action"    id="formAction"  value="">
+                <input type="hidden" name="action"    id="formAction" value="">
 
                 <div class="form-layout">
 
@@ -148,25 +166,31 @@ $date_today = date('l, F j, Y');
 
                         <div class="form-group">
                             <label>Reporter Name</label>
-                            <input type="text" name="reporter_name" id="reporter_name" class="input-field" placeholder="Enter your name">
+                            <input type="text" name="reporter_name" id="reporter_name"
+                                   class="input-field" placeholder="Enter your name">
                         </div>
 
                         <div class="form-group">
                             <label>Incident Title</label>
-                            <input type="text" name="incident_title" id="incident_title" class="input-field" placeholder="Brief title of the incident">
+                            <input type="text" name="incident_title" id="incident_title"
+                                   class="input-field" placeholder="Brief title of the incident"
+                                   value="<?php echo $prefill_title; ?>">
                         </div>
 
                         <div class="form-group">
                             <label>Location</label>
                             <div class="location-row">
-                                <input type="text" name="location" id="location" class="input-field" placeholder="Enter location">
+                                <input type="text" name="location" id="location"
+                                       class="input-field" placeholder="Enter location">
                                 <span class="location-icon"><i class="bi bi-geo-alt-fill"></i> PLACE</span>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Incident Description</label>
-                            <textarea name="description" id="description" class="input-field textarea" placeholder="Describe what happened..."></textarea>
+                            <textarea name="description" id="description"
+                                      class="input-field textarea"
+                                      placeholder="Describe what happened..."></textarea>
                         </div>
 
                     </div>
@@ -176,17 +200,19 @@ $date_today = date('l, F j, Y');
 
                         <div class="form-group">
                             <label>Contact Number</label>
-                            <input type="tel" name="contact_number" id="contact_number" class="input-field" placeholder="Enter contact number">
+                            <input type="tel" name="contact_number" id="contact_number"
+                                   class="input-field" placeholder="Enter contact number">
                         </div>
 
                         <div class="form-group">
                             <label>Incident Type</label>
-                            <select name="incident_type" id="incident_type" class="input-field select-field">
-                                <option value="" disabled selected></option>
-                                <option value="Fire">Fire</option>
-                                <option value="Flood">Flood</option>
-                                <option value="Crime">Crime</option>
-                                <option value="Medical">Medical</option>
+                            <select name="incident_type" id="incident_type"
+                                    class="input-field select-field">
+                                <option value="" disabled <?php echo empty($prefill_type) ? 'selected' : ''; ?>></option>
+                                <option value="Fire"    <?php echo $prefill_type === 'Fire'    ? 'selected' : ''; ?>>Fire</option>
+                                <option value="Flood"   <?php echo $prefill_type === 'Flood'   ? 'selected' : ''; ?>>Flood</option>
+                                <option value="Crime"   <?php echo $prefill_type === 'Crime'   ? 'selected' : ''; ?>>Crime</option>
+                                <option value="Medical" <?php echo $prefill_type === 'Medical' ? 'selected' : ''; ?>>Medical</option>
                             </select>
                         </div>
 
@@ -203,7 +229,8 @@ $date_today = date('l, F j, Y');
                             <div class="upload-area" id="uploadArea">
                                 <i class="bi bi-camera-fill"></i>
                                 <span>Capture / Drag photos here</span>
-                                <input type="file" name="photo" id="photoInput" accept="image/*,video/*" multiple>
+                                <input type="file" name="photo" id="photoInput"
+                                       accept="image/*,video/*" multiple>
                             </div>
                             <!-- Photo Preview Gallery -->
                             <div class="photo-preview-grid" id="photoPreviewGrid"></div>

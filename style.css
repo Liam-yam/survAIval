@@ -275,6 +275,11 @@ body {
     color: var(--text-dark);
 }
 
+.emergency-card {
+    text-decoration: none;
+    color: inherit;
+}
+
 .emergency-card.fire    { background-color: #f4a58a; }
 .emergency-card.flood   { background-color: #a8c8f0; }
 .emergency-card.alert   { background-color: #f0a0a8; }

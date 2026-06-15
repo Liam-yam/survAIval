@@ -65,8 +65,10 @@ if ($action === 'signup') {
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
     $mname_val = !empty($mname) ? "'$mname'" : "NULL";
 
-    $sql = "INSERT INTO tblusers (fname, mname, lname, gender, cellphone_no, barangay, city, email, password)
-            VALUES ('$fname', $mname_val, '$lname', '$gender', '$cellphone_no', '$barangay', '$city', '$email', '$hashed_password')";
+    $sql = "INSERT INTO tblusers
+                (fname, mname, lname, gender, cellphone_no, barangay, city, email, password)
+            VALUES
+                ('$fname', $mname_val, '$lname', '$gender', '$cellphone_no', '$barangay', '$city', '$email', '$hashed_password')";
 
     if (mysqli_query($conn, $sql)) {
         unset($_SESSION['form_data'], $_SESSION['active_tab']);
@@ -108,14 +110,16 @@ elseif ($action === 'login') {
         exit();
     }
 
-    // Set session — then go to dashboard at root
+    // Set session — now includes barangay and city
     unset($_SESSION['form_data'], $_SESSION['active_tab']);
-    $_SESSION['user_id']    = $user['user_id'];
-    $_SESSION['user_fname'] = $user['fname'];
-    $_SESSION['user_lname'] = $user['lname'];
-    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_id']       = $user['user_id'];
+    $_SESSION['user_fname']    = $user['fname'];
+    $_SESSION['user_lname']    = $user['lname'];
+    $_SESSION['user_email']    = $user['email'];
+    $_SESSION['user_barangay'] = $user['barangay'];
+    $_SESSION['user_city']     = $user['city'];
 
-    header("Location: ../index.php"); // ← goes up to root
+    header("Location: ../index.php");
     exit();
 }
 
