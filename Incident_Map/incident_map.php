@@ -7,10 +7,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once '../Registration/db.php';
+require_once '../Registration/user_context.php';
 
-$user_id    = $_SESSION['user_id'];
-$user_fname = $_SESSION['user_fname'];
-$user_lname = $_SESSION['user_lname'];
+$user_id = (int) $_SESSION['user_id'];
+$user_context = loadCurrentUserContext($conn, $user_id);
+$user_fname = $user_context['user']['fname'];
+$user_lname = $user_context['user']['lname'];
+$user_location = $user_context['location'];
 
 $date_today = date('F d, Y (l)');
 
@@ -96,8 +99,8 @@ function getStatusClass($status) {
 
         <div class="user-card">
             <p class="user-name"><?php echo $user_fname . ' ' . $user_lname; ?></p>
-            <p class="user-role">Resident | Purok 8</p>
-            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> San Pablo - Valle Pio</p>
+            <p class="user-role">Resident</p>
+            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> <?php echo htmlspecialchars($user_location); ?></p>
         </div>
 
         <nav class="sidebar-nav">
@@ -120,7 +123,7 @@ function getStatusClass($status) {
             <p class="nav-label">INFORMATION</p>
             <ul>
                 <li>
-                    <a href="../Announcements/announcements.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
+                    <a href="../Announcement/announcement.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
                 </li>
                 <li>
                     <a href="../Hotlines/hotlines.php"><i class="bi bi-telephone-fill"></i> Hotlines</a>
@@ -142,7 +145,7 @@ function getStatusClass($status) {
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
-                <p class="header-date"><?php echo date('l, F j, Y'); ?> — Brgy. San Pablo - Sto. Tomas City</p>
+                <p class="header-date"><?php echo date('l, F j, Y'); ?> - Brgy. <?php echo htmlspecialchars($user_location); ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>
@@ -238,7 +241,7 @@ function getStatusClass($status) {
                     <span class="map-dot dot-green"  style="top: 65%; left: 35%;"></span>
                     <span class="map-dot dot-red pulse-dot" style="top: 72%; left: 62%;" id="activeDot"></span>
 
-                    <p class="map-label">Brgy. Sta. Cruz — live pins</p>
+                    <p class="map-label">Brgy. <?php echo htmlspecialchars($user_location); ?> - live pins</p>
 
                     <div class="map-pin-highlight" id="mapPinHighlight">
                         <i class="bi bi-geo-alt-fill"></i>

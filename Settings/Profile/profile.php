@@ -7,11 +7,12 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once '../../Registration/db.php';
+require_once '../../Registration/user_context.php';
 
-$user_id = $_SESSION['user_id'];
-
-$result = mysqli_query($conn, "SELECT * FROM tblusers WHERE user_id = '$user_id'");
-$user   = mysqli_fetch_assoc($result);
+$user_id = (int) $_SESSION['user_id'];
+$user_context = loadCurrentUserContext($conn, $user_id);
+$user = $user_context['user'];
+$user_location = $user_context['location'];
 
 $prefix   = ($user['gender'] === 'Female') ? 'Ms.' : 'Mr.';
 $fullname = $user['fname'] . ' ' . ($user['mname'] ? $user['mname'] . ' ' : '') . $user['lname'];
@@ -87,8 +88,8 @@ function getActionLabel($status) {
         </div>
         <div class="user-card">
             <p class="user-name"><?php echo $user['fname'] . ' ' . $user['lname']; ?></p>
-            <p class="user-role">Resident | Purok 8</p>
-            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> San Pablo - Valle Pio</p>
+            <p class="user-role">Resident</p>
+            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> <?php echo htmlspecialchars($user_location); ?></p>
         </div>
         <nav class="sidebar-nav">
             <p class="nav-label">MENU</p>
@@ -115,7 +116,7 @@ function getActionLabel($status) {
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
-                <p class="header-date"><?php echo date('l, F j, Y'); ?> — Brgy. San Pablo - Sto. Tomas City</p>
+                <p class="header-date"><?php echo date('l, F j, Y'); ?> - Brgy. <?php echo htmlspecialchars($user_location); ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>

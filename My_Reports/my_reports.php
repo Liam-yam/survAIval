@@ -7,10 +7,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once '../Registration/db.php';
+require_once '../Registration/user_context.php';
 
-$user_id    = $_SESSION['user_id'];
-$user_fname = $_SESSION['user_fname'];
-$user_lname = $_SESSION['user_lname'];
+$user_id = (int) $_SESSION['user_id'];
+$user_context = loadCurrentUserContext($conn, $user_id);
+$user_fname = $user_context['user']['fname'];
+$user_lname = $user_context['user']['lname'];
+$user_location = $user_context['location'];
 
 $filter        = $_GET['status'] ?? 'all';
 $date_today    = date('l, F j, Y');
@@ -78,8 +81,8 @@ function getDotClass($status) {
 
         <div class="user-card">
             <p class="user-name"><?php echo $user_fname . ' ' . $user_lname; ?></p>
-            <p class="user-role">Resident | Purok 8</p>
-            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> San Pablo - Valle Pio</p>
+            <p class="user-role">Resident</p>
+            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> <?php echo htmlspecialchars($user_location); ?></p>
         </div>
 
         <nav class="sidebar-nav">
@@ -102,7 +105,7 @@ function getDotClass($status) {
             <p class="nav-label">INFORMATION</p>
             <ul>
                 <li>
-                    <a href="../Announcements/announcements.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
+                    <a href="../Announcement/announcement.php"><i class="bi bi-megaphone-fill"></i> Announcement</a>
                 </li>
                 <li>
                     <a href="../Hotlines/hotlines.php"><i class="bi bi-telephone-fill"></i> Hotlines</a>
@@ -124,7 +127,7 @@ function getDotClass($status) {
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
-                <p class="header-date"><?php echo $date_today; ?> — Brgy. San Pablo - Sto. Tomas City</p>
+                <p class="header-date"><?php echo $date_today; ?> - Brgy. <?php echo htmlspecialchars($user_location); ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>

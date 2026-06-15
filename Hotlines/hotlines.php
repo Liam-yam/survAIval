@@ -6,8 +6,14 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_fname = $_SESSION['user_fname'];
-$user_lname = $_SESSION['user_lname'];
+require_once '../Registration/db.php';
+require_once '../Registration/user_context.php';
+
+$user_id = (int) $_SESSION['user_id'];
+$user_context = loadCurrentUserContext($conn, $user_id);
+$user_fname = $user_context['user']['fname'];
+$user_lname = $user_context['user']['lname'];
+$user_location = $user_context['location'];
 
 $hotline_groups = [
 
@@ -124,8 +130,8 @@ $hotline_groups = [
         </div>
         <div class="user-card">
             <p class="user-name"><?php echo $user_fname . ' ' . $user_lname; ?></p>
-            <p class="user-role">Resident | Purok 8</p>
-            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> San Pablo - Valle Pio</p>
+            <p class="user-role">Resident</p>
+            <p class="user-location"><i class="bi bi-geo-alt-fill"></i> <?php echo htmlspecialchars($user_location); ?></p>
         </div>
         <nav class="sidebar-nav">
             <p class="nav-label">MENU</p>
@@ -152,7 +158,7 @@ $hotline_groups = [
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
-                <p class="header-date"><?php echo date('l, F j, Y'); ?> — Brgy. San Pablo - Sto. Tomas City</p>
+                <p class="header-date"><?php echo date('l, F j, Y'); ?> - Brgy. <?php echo htmlspecialchars($user_location); ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>

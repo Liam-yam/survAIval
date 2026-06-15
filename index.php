@@ -7,12 +7,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once 'Registration/db.php';
+require_once 'Registration/user_context.php';
 
-$user_id       = $_SESSION['user_id'];
-$user_fname    = $_SESSION['user_fname'];
-$user_lname    = $_SESSION['user_lname'];
-$user_barangay = $_SESSION['user_barangay'];
-$user_city     = $_SESSION['user_city'];
+$user_id = (int) $_SESSION['user_id'];
+$user_context = loadCurrentUserContext($conn, $user_id);
+$user_fname = $user_context['user']['fname'];
+$user_lname = $user_context['user']['lname'];
+$user_barangay = $user_context['barangay'];
+$user_city = $user_context['city'];
+$user_location = $user_context['location'];
 
 $hour = (int) date('H');
 if ($hour < 12) {
@@ -70,6 +73,7 @@ function getDotClass($status) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>survAIval - Dashboard</title>
+    <link rel="icon" type="image/png" href="<?php echo 'assets/logo-s.svg'; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -90,7 +94,7 @@ function getDotClass($status) {
             <p class="user-role">Resident</p>
             <p class="user-location">
                 <i class="bi bi-geo-alt-fill"></i>
-                <?php echo $user_barangay . ' - ' . $user_city; ?>
+                <?php echo htmlspecialchars($user_location); ?>
             </p>
         </div>
 
@@ -136,7 +140,7 @@ function getDotClass($status) {
         <div class="top-header">
             <div class="header-greeting">
                 <h1><?php echo $greeting . ', ' . $user_fname; ?></h1>
-                <p><?php echo $date_today; ?> — Brgy. <?php echo $user_barangay; ?> - <?php echo $user_city; ?></p>
+                <p><?php echo $date_today; ?> - Brgy. <?php echo htmlspecialchars($user_location); ?></p>
             </div>
             <div class="header-actions">
                 <button class="sos-btn">SOS</button>
