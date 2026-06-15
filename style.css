@@ -23,9 +23,6 @@ body {
     background-color: var(--main-bg);
 }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .sidebar {
     width: 260px;
     min-height: 100vh;
@@ -45,7 +42,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* User Card */
 .user-card {
     background-color: var(--primary-green);
     border-radius: 16px;
@@ -74,7 +70,6 @@ body {
     gap: 5px;
 }
 
-/* Nav Labels */
 .nav-label {
     font-size: 11px;
     font-weight: 600;
@@ -83,7 +78,6 @@ body {
     margin: 18px 0 8px 10px;
 }
 
-/* Nav Links */
 .sidebar-nav ul {
     list-style: none;
 }
@@ -115,7 +109,6 @@ body {
     font-weight: 700;
 }
 
-/* Logout */
 .sidebar-logout {
     margin-top: auto;
     border-top: 1px solid #c8dfc5;
@@ -140,16 +133,12 @@ body {
     color: #721c24;
 }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 .main-content {
     margin-left: 260px;
     flex: 1;
     padding: 30px 35px;
 }
 
-/* Top Header */
 .top-header {
     display: flex;
     justify-content: space-between;
@@ -206,9 +195,6 @@ body {
     color: var(--primary-green);
 }
 
-/* ============================================
-   WEATHER BANNER
-   ============================================ */
 .weather-banner {
     background-color: #f9c74f;
     border-radius: 16px;
@@ -226,9 +212,6 @@ body {
     font-size: 26px;
 }
 
-/* ============================================
-   SECTION LABEL
-   ============================================ */
 .section-label {
     font-size: 12px;
     font-weight: 700;
@@ -237,9 +220,6 @@ body {
     margin-bottom: 14px;
 }
 
-/* ============================================
-   EMERGENCY CARDS
-   ============================================ */
 .emergency-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -285,9 +265,6 @@ body {
 .emergency-card.alert   { background-color: #f0a0a8; }
 .emergency-card.medical { background-color: #a8e0a0; }
 
-/* ============================================
-   BOTTOM GRID (Reports + Announcements)
-   ============================================ */
 .bottom-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -310,9 +287,6 @@ body {
     gap: 10px;
 }
 
-/* ============================================
-   INCIDENT REPORT ITEMS
-   ============================================ */
 .report-item {
     display: flex;
     align-items: center;
@@ -365,7 +339,6 @@ body {
     margin-top: 5px;
 }
 
-/* Status Badges */
 .badge {
     display: inline-block;
     font-size: 12px;
@@ -378,9 +351,6 @@ body {
 .badge-resolved   { background-color: #d4edda; color: #155724; }
 .badge-pending    { background-color: #f8d7da; color: #721c24; }
 
-/* ============================================
-   ANNOUNCEMENTS
-   ============================================ */
 .announcement-item {
     display: flex;
     gap: 14px;
@@ -424,9 +394,6 @@ body {
     color: var(--text-muted);
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 1024px) {
     .emergency-grid {
         grid-template-columns: repeat(2, 1fr);

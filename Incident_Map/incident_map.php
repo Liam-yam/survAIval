@@ -14,7 +14,6 @@ $user_lname = $_SESSION['user_lname'];
 
 $date_today = date('F d, Y (l)');
 
-// Filter by status
 $filter = $_GET['status'] ?? 'all';
 
 if ($filter !== 'all') {
@@ -30,7 +29,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $reports[] = $row;
 }
 
-// Time ago function
 function time_ago($datetime) {
     $now        = new DateTime();
     $created    = new DateTime($datetime);
@@ -47,7 +45,6 @@ function time_ago($datetime) {
     }
 }
 
-// Icon per incident type
 function getTypeIcon($type) {
     switch ($type) {
         case 'Fire':    return '../assets/Fire.svg';
@@ -58,7 +55,6 @@ function getTypeIcon($type) {
     }
 }
 
-// Status label + class
 function getStatusLabel($status) {
     switch ($status) {
         case 'pending':    return 'Reported';
@@ -92,9 +88,6 @@ function getStatusClass($status) {
 </head>
 <body>
 
-    <!-- ================================ -->
-    <!-- SIDEBAR                          -->
-    <!-- ================================ -->
     <aside class="sidebar">
 
         <div class="sidebar-logo">
@@ -144,12 +137,8 @@ function getStatusClass($status) {
 
     </aside>
 
-    <!-- ================================ -->
-    <!-- MAIN CONTENT                     -->
-    <!-- ================================ -->
     <main class="main-content">
 
-        <!-- Top Header -->
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
@@ -161,16 +150,12 @@ function getStatusClass($status) {
             </div>
         </div>
 
-        <!-- Page Title -->
         <h1 class="page-title">Incident Map</h1>
 
-        <!-- Two Column Layout -->
         <div class="map-layout">
 
-            <!-- LEFT: Incident List -->
             <div class="incident-list-card">
 
-                <!-- Date + Filter -->
                 <div class="list-header">
                     <p class="list-date"><?php echo date('F d, Y (l)'); ?></p>
                     <div class="filter-group">
@@ -186,7 +171,6 @@ function getStatusClass($status) {
                     </div>
                 </div>
 
-                <!-- Filter Dropdown -->
                 <div class="filter-options">
                     <a href="incident_map.php?status=pending"
                        class="filter-opt <?php echo $filter === 'pending' ? 'active' : ''; ?>">
@@ -202,7 +186,6 @@ function getStatusClass($status) {
                     </a>
                 </div>
 
-                <!-- Scrollable List -->
                 <div class="incident-list" id="incidentList">
                     <?php if (empty($reports)): ?>
                         <div class="no-reports">
@@ -246,10 +229,9 @@ function getStatusClass($status) {
 
             </div>
 
-            <!-- RIGHT: Map Placeholder -->
             <div class="map-card">
                 <div class="map-placeholder" id="mapPlaceholder">
-                    <!-- Static decorative dots -->
+
                     <span class="map-dot dot-red"    style="top: 22%; left: 42%;"></span>
                     <span class="map-dot dot-green"  style="top: 30%; left: 68%;"></span>
                     <span class="map-dot dot-orange" style="top: 45%; left: 55%;"></span>
@@ -258,14 +240,12 @@ function getStatusClass($status) {
 
                     <p class="map-label">Brgy. Sta. Cruz — live pins</p>
 
-                    <!-- Highlighted pin shown on click -->
                     <div class="map-pin-highlight" id="mapPinHighlight">
                         <i class="bi bi-geo-alt-fill"></i>
                         <span id="mapPinLabel">—</span>
                     </div>
                 </div>
 
-                <!-- Legend -->
                 <div class="map-legend">
                     <div class="legend-item">
                         <span class="dot dot-red"></span> Reported

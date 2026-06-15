@@ -23,7 +23,6 @@ $incident_type = mysqli_real_escape_string($conn, trim($_POST['incident_type']  
 $location      = mysqli_real_escape_string($conn, trim($_POST['location']       ?? ''));
 $description   = mysqli_real_escape_string($conn, trim($_POST['description']    ?? ''));
 
-// Handle photo upload
 $photo_path = '';
 if (isset($_FILES['photo']) && $_FILES['photo']['error'][0] === 0) {
     $upload_dir = '../assets/uploads/';
@@ -36,9 +35,6 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'][0] === 0) {
     $photo_path = mysqli_real_escape_string($conn, 'assets/uploads/' . $filename);
 }
 
-// ============================================
-// SUBMIT REPORT
-// ============================================
 if ($action === 'submit') {
 
     if (empty($reporter_name) || empty($contact_number) || empty($incident_title) ||
@@ -48,7 +44,6 @@ if ($action === 'submit') {
         exit();
     }
 
-    // If submitting an existing draft, update it
     if (!empty($report_id)) {
         $photo_sql = !empty($photo_path) ? ", photo = '$photo_path'" : "";
         $sql = "UPDATE tblreports SET
@@ -78,12 +73,8 @@ if ($action === 'submit') {
     exit();
 }
 
-// ============================================
-// SAVE AS DRAFT
-// ============================================
 elseif ($action === 'draft') {
 
-    // If updating existing draft
     if (!empty($report_id)) {
         $photo_sql = !empty($photo_path) ? ", photo = '$photo_path'" : "";
         $sql = "UPDATE tblreports SET

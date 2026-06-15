@@ -9,9 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_fname = $_SESSION['user_fname'];
 $user_lname = $_SESSION['user_lname'];
 
-// ============================================
-// HOTLINES — Grouped
-// ============================================
 $hotline_groups = [
 
     'Landlines' => [
@@ -121,7 +118,6 @@ $hotline_groups = [
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <img src="../assets/logo.svg" alt="survAIval Logo">
@@ -151,10 +147,8 @@ $hotline_groups = [
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
-        <!-- Top Header -->
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
@@ -168,13 +162,11 @@ $hotline_groups = [
 
         <h1 class="page-title">Emergency Hotlines</h1>
 
-        <!-- Search Bar -->
         <div class="search-wrap">
             <i class="bi bi-search"></i>
             <input type="text" id="searchInput" placeholder="Search hotlines..." class="search-input">
         </div>
 
-        <!-- Hotlines Card -->
         <div class="hotlines-card">
             <?php foreach ($hotline_groups as $group_name => $hotlines): ?>
 
@@ -185,12 +177,10 @@ $hotline_groups = [
                         <div class="hotline-row"
                              data-search="<?php echo strtolower($hotline['name'] . ' ' . $hotline['subtitle']); ?>">
 
-                            <!-- Icon -->
                             <div class="hotline-icon">
                                 <i class="bi <?php echo $hotline['icon']; ?>"></i>
                             </div>
 
-                            <!-- Name + Subtitle + Status -->
                             <div class="hotline-info">
                                 <p class="hotline-name"><?php echo $hotline['name']; ?></p>
                                 <div class="hotline-meta">
@@ -205,18 +195,15 @@ $hotline_groups = [
                                 </div>
                             </div>
 
-                            <!-- Number + Copy + Call/Visit -->
                             <div class="hotline-right">
                                 <p class="hotline-number"><?php echo $hotline['number']; ?></p>
 
-                                <!-- Copy button -->
                                 <button class="copy-btn"
                                         onclick="copyNumber('<?php echo $hotline['number']; ?>', this)"
                                         title="Copy number">
                                     <i class="bi bi-clipboard"></i>
                                 </button>
 
-                                <!-- Call / Link button -->
                                 <?php if (!empty($hotline['is_link'])): ?>
                                     <a href="<?php echo $hotline['tel']; ?>"
                                        target="_blank"
@@ -242,7 +229,6 @@ $hotline_groups = [
             <?php endforeach; ?>
         </div>
 
-        <!-- No results -->
         <div class="no-results" id="noResults" style="display:none;">
             <i class="bi bi-inbox"></i>
             <p>No hotlines found.</p>
@@ -250,7 +236,6 @@ $hotline_groups = [
 
     </main>
 
-    <!-- CALL CONFIRM MODAL -->
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal" id="callModal">
         <div class="modal-icon">
@@ -265,7 +250,6 @@ $hotline_groups = [
         </div>
     </div>
 
-    <!-- Copy Toast -->
     <div class="toast" id="copyToast">
         <i class="bi bi-check-circle-fill"></i> Number copied!
     </div>

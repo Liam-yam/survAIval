@@ -10,18 +10,14 @@ require_once '../../Registration/db.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Get full user info
 $result = mysqli_query($conn, "SELECT * FROM tblusers WHERE user_id = '$user_id'");
 $user   = mysqli_fetch_assoc($result);
 
-// Name prefix
 $prefix   = ($user['gender'] === 'Female') ? 'Ms.' : 'Mr.';
 $fullname = $user['fname'] . ' ' . ($user['mname'] ? $user['mname'] . ' ' : '') . $user['lname'];
 
-// Avatar — first letter of fname
 $avatar_letter = strtoupper(substr($user['fname'], 0, 1));
 
-// Avatar colors based on letter
 $colors = [
     'A' => '#9b59b6', 'B' => '#2980b9', 'C' => '#27ae60', 'D' => '#e67e22',
     'E' => '#c0392b', 'F' => '#16a085', 'G' => '#8e44ad', 'H' => '#2c3e50',
@@ -33,12 +29,10 @@ $colors = [
 ];
 $avatar_color = $colors[$avatar_letter] ?? '#2d5a27';
 
-// Flash messages
 $success_message = $_SESSION['success_message'] ?? '';
 $error_message   = $_SESSION['error_message']   ?? '';
 unset($_SESSION['success_message'], $_SESSION['error_message']);
 
-// User Action Log — from tblreports
 $log_result = mysqli_query($conn, "
     SELECT incident_title, incident_type, status, created_at, updated_at
     FROM tblreports
@@ -51,7 +45,6 @@ while ($row = mysqli_fetch_assoc($log_result)) {
     $action_logs[] = $row;
 }
 
-// Time ago
 function time_ago($datetime) {
     $now   = new DateTime();
     $past  = new DateTime($datetime);
@@ -63,7 +56,6 @@ function time_ago($datetime) {
     return $diff->days . 'd ago';
 }
 
-// Action label + badge
 function getActionLabel($status) {
     switch ($status) {
         case 'draft':      return ['Saved Draft',       'log-draft'];
@@ -89,7 +81,6 @@ function getActionLabel($status) {
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <img src="../../assets/logo.svg" alt="survAIval Logo">
@@ -119,7 +110,6 @@ function getActionLabel($status) {
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <div class="top-header">
@@ -148,13 +138,9 @@ function getActionLabel($status) {
 
         <div class="profile-layout">
 
-            <!-- ================================ -->
-            <!-- LEFT: Account Profile            -->
-            <!-- ================================ -->
             <div class="profile-card">
                 <p class="card-label">Account Profile</p>
 
-                <!-- Avatar -->
                 <div class="avatar-wrap">
                     <?php if (!empty($user['profile_pic'])): ?>
                         <img src="../../<?php echo $user['profile_pic']; ?>"
@@ -167,10 +153,8 @@ function getActionLabel($status) {
                     <?php endif; ?>
                 </div>
 
-                <!-- Display Name -->
                 <p class="profile-display-name"><?php echo $user['fname']; ?></p>
 
-                <!-- Info -->
                 <div class="profile-info">
                     <div class="info-row">
                         <span class="info-label">Name</span>
@@ -195,16 +179,11 @@ function getActionLabel($status) {
                 </button>
             </div>
 
-            <!-- ================================ -->
-            <!-- RIGHT COLUMN                     -->
-            <!-- ================================ -->
             <div class="right-column">
 
-                <!-- Platform Reference -->
                 <div class="platform-card">
                     <div class="platform-layout">
 
-                        <!-- Left: Preferences -->
                         <div class="platform-left">
                             <p class="card-label">Platform Reference</p>
 
@@ -225,7 +204,6 @@ function getActionLabel($status) {
                             </div>
                         </div>
 
-                        <!-- Right: User Action Log -->
                         <div class="platform-right">
                             <p class="card-label">User Action Log</p>
 
@@ -258,9 +236,6 @@ function getActionLabel($status) {
         </div>
     </main>
 
-    <!-- ================================ -->
-    <!-- EDIT PROFILE MODAL               -->
-    <!-- ================================ -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeEditModal()"></div>
     <div class="modal" id="editModal">
         <div class="modal-header">
@@ -270,7 +245,6 @@ function getActionLabel($status) {
         <div class="modal-body">
             <form method="POST" action="profile_process.php" enctype="multipart/form-data">
 
-                <!-- Photo Upload -->
                 <div class="photo-upload-wrap">
                     <?php if (!empty($user['profile_pic'])): ?>
                         <img src="../../<?php echo $user['profile_pic']; ?>"
@@ -291,7 +265,6 @@ function getActionLabel($status) {
                     </label>
                 </div>
 
-                <!-- Name Fields -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>First Name <span class="required">*</span></label>
@@ -317,7 +290,6 @@ function getActionLabel($status) {
                            value="<?php echo $user['cellphone_no']; ?>" required>
                 </div>
 
-                <!-- Locked Fields -->
                 <div class="locked-info">
                     <i class="bi bi-lock-fill"></i>
                     Email and barangay info cannot be changed here.

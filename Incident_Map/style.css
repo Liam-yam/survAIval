@@ -24,9 +24,6 @@ body {
     background-color: var(--main-bg);
 }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .sidebar {
     width: 260px;
     min-height: 100vh;
@@ -95,9 +92,6 @@ body {
 
 .sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 .main-content {
     margin-left: 260px;
     flex: 1;
@@ -135,9 +129,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* ============================================
-   TWO COLUMN LAYOUT
-   ============================================ */
 .map-layout {
     display: grid;
     grid-template-columns: 420px 1fr;
@@ -145,9 +136,6 @@ body {
     align-items: start;
 }
 
-/* ============================================
-   INCIDENT LIST CARD
-   ============================================ */
 .incident-list-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -195,7 +183,6 @@ body {
 
 .filter-clear:hover { color: #c0392b; border-color: #c0392b; }
 
-/* Filter Options Row */
 .filter-options {
     display: flex; gap: 10px;
     margin-bottom: 16px;
@@ -215,7 +202,6 @@ body {
 .filter-opt:hover { border-color: var(--primary-green); color: var(--primary-green); }
 .filter-opt.active { background-color: #f0f7ee; border-color: var(--primary-green); color: var(--primary-green); font-weight: 700; }
 
-/* Dots */
 .dot {
     width: 12px; height: 12px;
     border-radius: 50%; flex-shrink: 0;
@@ -225,7 +211,6 @@ body {
 .dot-orange { background-color: #e07000; }
 .dot-green  { background-color: #27a060; }
 
-/* Scrollable Incident List */
 .incident-list {
     max-height: 500px;
     overflow-y: auto;
@@ -237,7 +222,6 @@ body {
 .incident-list::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 10px; }
 .incident-list::-webkit-scrollbar-thumb:hover { background: var(--primary-green); }
 
-/* Incident Row */
 .incident-item {
     display: flex; justify-content: space-between;
     align-items: flex-start;
@@ -282,7 +266,6 @@ body {
     margin-top: 5px;
 }
 
-/* Status Badges */
 .status-badge {
     display: inline-block; font-size: 12px;
     font-weight: 700; padding: 5px 14px;
@@ -293,16 +276,12 @@ body {
 .badge-responding { background-color: #e07000; color: #fff; }
 .badge-resolved   { background-color: #27a060; color: #fff; }
 
-/* No Reports */
 .no-reports {
     text-align: center; padding: 50px 0;
     color: var(--text-muted);
 }
 .no-reports i { font-size: 36px; margin-bottom: 10px; display: block; }
 
-/* ============================================
-   MAP CARD
-   ============================================ */
 .map-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -319,7 +298,6 @@ body {
     align-items: center;
     justify-content: center;
 
-    /* Grid pattern */
     background-image:
         linear-gradient(rgba(150,180,220,0.4) 1px, transparent 1px),
         linear-gradient(90deg, rgba(150,180,220,0.4) 1px, transparent 1px);
@@ -332,7 +310,6 @@ body {
     pointer-events: none;
 }
 
-/* Static dots on map */
 .map-dot {
     position: absolute;
     width: 14px; height: 14px;
@@ -341,7 +318,6 @@ body {
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
-/* Active pulsing dot */
 .pulse-dot {
     width: 16px; height: 16px;
 }
@@ -361,7 +337,6 @@ body {
     100% { transform: scale(1.8); opacity: 0; }
 }
 
-/* Highlighted pin on click */
 .map-pin-highlight {
     display: none;
     position: absolute;
@@ -383,7 +358,6 @@ body {
 
 .map-pin-highlight i { font-size: 16px; }
 
-/* Map Legend */
 .map-legend {
     display: flex; justify-content: center;
     gap: 24px; padding: 14px;
@@ -397,9 +371,6 @@ body {
     font-weight: 500; color: var(--text-dark);
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 1024px) {
     .map-layout { grid-template-columns: 1fr; }
     .map-placeholder { min-height: 300px; }

@@ -15,9 +15,6 @@
 
 body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .sidebar {
     width: 260px; min-height: 100vh;
     background-color: var(--sidebar-bg);
@@ -77,9 +74,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 .main-content { margin-left: 260px; flex: 1; padding: 30px 35px; }
 
 .top-header {
@@ -111,9 +105,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     color: var(--primary-green); margin-bottom: 18px;
 }
 
-/* ============================================
-   SEARCH BAR
-   ============================================ */
 .search-wrap {
     display: flex; align-items: center; gap: 10px;
     background-color: var(--card-bg);
@@ -134,9 +125,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .search-input::placeholder { color: var(--text-muted); }
 
-/* ============================================
-   HOTLINES CARD
-   ============================================ */
 .hotlines-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -156,9 +144,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .group-divider:last-child { display: none; }
 
-/* ============================================
-   HOTLINE LIST
-   ============================================ */
 .hotline-list { display: flex; flex-direction: column; }
 
 .hotline-row {
@@ -173,7 +158,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .hotline-row:hover       { background-color: #f5fbf5; }
 .hotline-row.hidden      { display: none; }
 
-/* Icon */
 .hotline-icon {
     width: 46px; height: 46px;
     background-color: #e8f5e9;
@@ -183,7 +167,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .hotline-icon i { font-size: 20px; color: var(--primary-green); }
 
-/* Info */
 .hotline-info { flex: 1; }
 
 .hotline-name {
@@ -198,7 +181,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .hotline-subtitle { font-size: 12px; color: var(--text-muted); }
 
-/* Status dot + text */
 .status-dot {
     width: 8px; height: 8px;
     border-radius: 50%; flex-shrink: 0;
@@ -210,7 +192,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .status-text.active { color: #27a060; }
 .status-text.office { color: #e07000; }
 
-/* Right: Number + Buttons */
 .hotline-right {
     display: flex; align-items: center;
     gap: 10px; flex-shrink: 0;
@@ -222,7 +203,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     min-width: 140px; text-align: right;
 }
 
-/* Copy Button */
 .copy-btn {
     width: 38px; height: 38px;
     background-color: #f0f7ee;
@@ -237,7 +217,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .copy-btn:hover       { background-color: #d6ecd2; }
 .copy-btn.copied i    { color: #27a060; }
 
-/* Call Button */
 .call-btn {
     width: 42px; height: 42px;
     background-color: var(--primary-green);
@@ -250,18 +229,12 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .call-btn:hover { background-color: var(--primary-hover); transform: scale(1.05); }
 
-/* ============================================
-   NO RESULTS
-   ============================================ */
 .no-results {
     text-align: center; padding: 40px;
     color: var(--text-muted); display: none;
 }
 .no-results i { font-size: 36px; display: block; margin-bottom: 10px; }
 
-/* ============================================
-   CALL CONFIRM MODAL
-   ============================================ */
 .modal-overlay {
     display: none; position: fixed;
     inset: 0; background-color: rgba(0,0,0,0.4); z-index: 100;
@@ -314,9 +287,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .btn-call:hover { background-color: var(--primary-hover); }
 
-/* ============================================
-   COPY TOAST NOTIFICATION
-   ============================================ */
 .toast {
     position: fixed; bottom: 30px; left: 50%;
     transform: translateX(-50%);
@@ -330,9 +300,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .toast.show { opacity: 1; }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 768px) {
     .sidebar      { display: none; }
     .main-content { margin-left: 0; padding: 20px; }

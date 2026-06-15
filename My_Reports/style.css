@@ -24,9 +24,6 @@ body {
     background-color: var(--main-bg);
 }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .sidebar {
     width: 260px;
     min-height: 100vh;
@@ -112,9 +109,6 @@ body {
 
 .sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 .main-content {
     margin-left: 260px;
     flex: 1;
@@ -166,9 +160,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* ============================================
-   REPORTS CARD
-   ============================================ */
 .reports-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -188,7 +179,6 @@ body {
     color: var(--primary-green);
 }
 
-/* Filter Buttons */
 .filter-group {
     display: flex;
     gap: 8px;
@@ -217,16 +207,12 @@ body {
     border-color: var(--primary-green);
 }
 
-/* ============================================
-   REPORT LIST (Scrollable)
-   ============================================ */
 .report-list {
     max-height: 520px;
     overflow-y: auto;
     padding-right: 6px;
 }
 
-/* Custom scrollbar */
 .report-list::-webkit-scrollbar { width: 5px; }
 .report-list::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 10px; }
 .report-list::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 10px; }
@@ -288,7 +274,6 @@ body {
     margin-top: 5px;
 }
 
-/* Status Badges */
 .status-badge {
     display: inline-block;
     font-size: 13px;
@@ -301,7 +286,6 @@ body {
 .status-responding { background-color: #fff3cd; color: #856404; }
 .status-resolved   { background-color: #d4edda; color: #155724; }
 
-/* Eye Button */
 .eye-btn {
     background: none;
     border: none;
@@ -318,7 +302,6 @@ body {
     background-color: #f0f0f0;
 }
 
-/* No Reports */
 .no-reports {
     text-align: center;
     padding: 60px 0;
@@ -328,9 +311,6 @@ body {
 .no-reports i    { font-size: 40px; margin-bottom: 12px; display: block; }
 .no-reports p    { font-size: 15px; }
 
-/* ============================================
-   MODAL
-   ============================================ */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -387,7 +367,6 @@ body {
 
 .modal-body { padding: 20px 24px 28px; }
 
-/* Detail Rows */
 .modal-details { margin-bottom: 20px; }
 
 .detail-row {
@@ -407,7 +386,6 @@ body {
     gap: 5px;
 }
 
-/* Modal Photo */
 .modal-photo-wrap {
     margin-bottom: 20px;
 }
@@ -429,9 +407,6 @@ body {
     max-height: 200px;
 }
 
-/* ============================================
-   STATUS TRACKER
-   ============================================ */
 .status-tracker {
     background-color: #f8f8f8;
     border-radius: 14px;
@@ -483,7 +458,6 @@ body {
     background-color: #d0d0d0;
 }
 
-/* Active step styles — set via JS */
 .tracker-step.done .step-dot  { background-color: var(--primary-green); }
 .tracker-step.done .step-line { background-color: var(--primary-green); }
 .tracker-step.done p           { color: var(--text-dark); font-weight: 600; }
@@ -491,9 +465,6 @@ body {
 .tracker-step.current .step-dot { background-color: #e07000; }
 .tracker-step.current p          { color: #e07000; font-weight: 700; }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 768px) {
     .sidebar      { display: none; }
     .main-content { margin-left: 0; padding: 20px; }

@@ -6,7 +6,6 @@ $success_message = $_SESSION['success_message'] ?? '';
 $error_message   = $_SESSION['error_message']   ?? '';
 $old             = $_SESSION['form_data']        ?? [];
 
-// Cleanup flash messages after reading
 unset(
     $_SESSION['success_message'],
     $_SESSION['error_message'],
@@ -30,7 +29,6 @@ unset(
 
 <body>
 
-    <!-- Flash Messages -->
     <?php if (!empty($success_message)): ?>
         <div class="alert alert-success"><?php echo $success_message; ?></div>
     <?php endif; ?>
@@ -41,21 +39,16 @@ unset(
 
     <div class="auth-container">
 
-        <!-- Tabs -->
         <div class="auth-tabs">
             <button class="tab-btn <?php echo $active_tab === 'signup' ? 'active' : ''; ?>" onclick="switchTab('signup')">Sign up</button>
             <button class="tab-btn <?php echo $active_tab === 'login'  ? 'active' : ''; ?>" onclick="switchTab('login')">Log in</button>
         </div>
 
-        <!-- Logo -->
         <div class="brand-logo">
             <img src="../assets/logo.svg" alt="survAIval Logo"
                 style="height: 60px; width: auto; display: block;" />
         </div>
 
-        <!-- ================================ -->
-        <!-- SIGN UP FORM                     -->
-        <!-- ================================ -->
         <form id="signup-form"
               method="POST"
               action="auth_process.php"
@@ -66,7 +59,6 @@ unset(
 
             <div class="form-grid">
 
-                <!-- Name Row -->
                 <div>
                     <input type="text" name="fname" class="input-field"
                         placeholder="First Name *"
@@ -78,14 +70,12 @@ unset(
                         value="<?php echo $old['lname'] ?? ''; ?>" required>
                 </div>
 
-                <!-- Middle Name (Optional) -->
                 <div class="full-width">
                     <input type="text" name="mname" class="input-field"
                         placeholder="Middle Name (Optional)"
                         value="<?php echo $old['mname'] ?? ''; ?>">
                 </div>
 
-                <!-- Gender & Phone -->
                 <div>
                     <select name="gender" class="input-field select-field" required>
                         <option value="" disabled <?php echo empty($old['gender']) ? 'selected' : ''; ?>>Gender *</option>
@@ -99,7 +89,6 @@ unset(
                         value="<?php echo $old['cellphone_no'] ?? ''; ?>" required>
                 </div>
 
-                <!-- Barangay & City -->
                 <div>
                     <input type="text" name="barangay" class="input-field"
                         placeholder="Barangay *"
@@ -111,14 +100,12 @@ unset(
                         value="<?php echo $old['city'] ?? ''; ?>" required>
                 </div>
 
-                <!-- Email -->
                 <div class="full-width spacer">
                     <input type="email" name="email" class="input-field"
                         placeholder="Email *"
                         value="<?php echo $old['email'] ?? ''; ?>" required>
                 </div>
 
-                <!-- Password -->
                 <div>
                     <input type="password" name="password" class="input-field"
                         placeholder="Password *" required>
@@ -133,9 +120,6 @@ unset(
             <button type="submit" class="submit-btn">Create Account</button>
         </form>
 
-        <!-- ================================ -->
-        <!-- LOG IN FORM                      -->
-        <!-- ================================ -->
         <form id="login-form"
               method="POST"
               action="auth_process.php"

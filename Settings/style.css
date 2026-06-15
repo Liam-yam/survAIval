@@ -13,9 +13,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .sidebar {
     width: 260px; min-height: 100vh;
     background-color: var(--sidebar-bg);
@@ -38,9 +35,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .sidebar-logout a { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--primary-green); text-decoration: none; padding: 10px 14px; border-radius: 10px; transition: background-color 0.2s, color 0.2s; }
 .sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 .main-content { margin-left: 260px; flex: 1; padding: 30px 35px; }
 
 .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -55,14 +49,10 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .page-title { font-size: 32px; font-weight: 800; color: var(--primary-green); margin-bottom: 20px; }
 
-/* Flash Alerts */
 .alert { padding: 12px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 14px; font-weight: 500; }
 .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 .alert-error   { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-/* ============================================
-   SETTINGS CARDS
-   ============================================ */
 .settings-card {
     background-color: var(--card-bg);
     border-radius: 16px;
@@ -76,7 +66,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     margin-bottom: 14px;
 }
 
-/* Settings Row */
 .settings-row {
     display: flex; align-items: center;
     justify-content: space-between;
@@ -109,9 +98,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .row-divider { border-top: 1px solid var(--border); margin: 4px 0; }
 
-/* ============================================
-   TOGGLE SWITCH
-   ============================================ */
 .toggle {
     position: relative; display: inline-block;
     width: 50px; height: 28px; flex-shrink: 0;
@@ -142,9 +128,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .toggle-slider.disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ============================================
-   BARANGAY MODAL
-   ============================================ */
 .modal-overlay {
     display: none; position: fixed;
     inset: 0; background-color: rgba(0,0,0,0.4); z-index: 100;
@@ -185,9 +168,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     border-radius: 10px; padding: 12px;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 768px) {
     .sidebar      { display: none; }
     .main-content { margin-left: 0; padding: 20px; max-width: 100%; }

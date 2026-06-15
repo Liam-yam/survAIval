@@ -23,7 +23,6 @@ body {
     background-color: var(--main-bg);
 }
 
-/* SIDEBAR — same as settings */
 .sidebar {
     width: 260px;
     min-height: 100vh;
@@ -134,7 +133,6 @@ body {
     color: #721c24;
 }
 
-/* MAIN CONTENT */
 .main-content {
     margin-left: 260px;
     flex: 1;
@@ -196,7 +194,6 @@ body {
     color: var(--primary-green);
 }
 
-/* Back Button */
 .back-btn {
     display: inline-flex;
     align-items: center;
@@ -220,7 +217,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Flash Alerts */
 .alert {
     padding: 12px 18px;
     border-radius: 10px;
@@ -241,7 +237,6 @@ body {
     border: 1px solid #f5c6cb;
 }
 
-/* PASSWORD CARD */
 .password-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -272,7 +267,6 @@ body {
     line-height: 1.6;
 }
 
-/* Form */
 .form-group {
     margin-bottom: 20px;
 }

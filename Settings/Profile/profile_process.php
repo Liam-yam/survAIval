@@ -19,14 +19,12 @@ $mname       = mysqli_real_escape_string($conn, trim($_POST['mname']        ?? '
 $lname       = mysqli_real_escape_string($conn, trim($_POST['lname']        ?? ''));
 $cellphone_no = mysqli_real_escape_string($conn, trim($_POST['cellphone_no'] ?? ''));
 
-// Validate required fields
 if (empty($fname) || empty($lname) || empty($cellphone_no)) {
     $_SESSION['error_message'] = "Please fill in all required fields.";
     header("Location: profile.php");
     exit();
 }
 
-// Handle photo upload
 $photo_sql = '';
 if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === 0) {
     $upload_dir = '../../assets/profile_pics/';
@@ -34,7 +32,6 @@ if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === 0) {
         mkdir($upload_dir, 0755, true);
     }
 
-    // Only allow images
     $allowed_types = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     $file_type     = $_FILES['profile_pic']['type'];
 
@@ -52,7 +49,6 @@ if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === 0) {
     $photo_sql  = ", profile_pic = '$photo_path'";
 }
 
-// Update tblusers
 $mname_val = !empty($mname) ? "'$mname'" : "NULL";
 
 $sql = "UPDATE tblusers SET
@@ -64,7 +60,7 @@ $sql = "UPDATE tblusers SET
         WHERE user_id = '$user_id'";
 
 if (mysqli_query($conn, $sql)) {
-    // Update session
+
     $_SESSION['user_fname'] = $fname;
     $_SESSION['user_lname'] = $lname;
     $_SESSION['success_message'] = "Profile updated successfully!";

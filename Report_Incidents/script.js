@@ -1,9 +1,3 @@
-// ============================================
-// survAIval — Report Incidents Script
-// ============================================
-
-// ---- Form Actions ----
-
 function submitReport() {
     document.getElementById('formAction').value = 'submit';
     document.getElementById('reportForm').submit();
@@ -13,8 +7,6 @@ function saveDraft() {
     document.getElementById('formAction').value = 'draft';
     document.getElementById('reportForm').submit();
 }
-
-// ---- Drafts Panel ----
 
 function openDrafts() {
     document.getElementById('draftsOverlay').classList.add('open');
@@ -28,8 +20,6 @@ function closeDrafts() {
 
 document.getElementById('draftsBtn').addEventListener('click', openDrafts);
 
-// ---- Load Draft into Form ----
-
 function loadDraft(draft) {
     document.getElementById('report_id').value      = draft.report_id     || '';
     document.getElementById('reporter_name').value  = draft.reporter_name  || '';
@@ -40,11 +30,8 @@ function loadDraft(draft) {
     document.getElementById('description').value    = draft.description    || '';
     closeDrafts();
 
-    // Scroll to form top
     document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
 }
-
-// ---- Photo Preview ----
 
 const photoInput       = document.getElementById('photoInput');
 const photoPreviewGrid = document.getElementById('photoPreviewGrid');
@@ -80,11 +67,8 @@ photoInput.addEventListener('change', function () {
         reader.readAsDataURL(file);
     });
 
-    // Reset input so same file can be re-selected
     photoInput.value = '';
 });
-
-// ---- Drag and Drop ----
 
 const uploadArea = document.getElementById('uploadArea');
 
@@ -131,8 +115,6 @@ uploadArea.addEventListener('drop', function (e) {
         reader.readAsDataURL(file);
     });
 });
-
-// ---- SOS Confirmation ----
 
 document.querySelector('.sos-btn').addEventListener('click', function () {
     if (window.confirm("Are you sure you want to send an SOS alert?")) {

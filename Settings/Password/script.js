@@ -1,9 +1,3 @@
-// ============================================
-// survAIval — Change Password Script
-// ============================================
-
-// ---- Show/Hide Password Toggle ----
-
 function togglePass(fieldId, btn) {
     var field = document.getElementById(fieldId);
     var icon  = btn.querySelector('i');
@@ -16,8 +10,6 @@ function togglePass(fieldId, btn) {
         icon.className = 'bi bi-eye';
     }
 }
-
-// ---- SOS Confirmation ----
 
 document.querySelector('.sos-btn').addEventListener('click', function () {
     if (window.confirm("Are you sure you want to send an SOS alert?")) {

@@ -1,8 +1,3 @@
-// ============================================
-// survAIval — Dashboard Script
-// ============================================
-
-// Active nav link highlight
 const navLinks = document.querySelectorAll('.sidebar-nav ul li');
 navLinks.forEach(function(item) {
     item.addEventListener('click', function() {
@@ -11,7 +6,6 @@ navLinks.forEach(function(item) {
     });
 });
 
-// SOS button confirmation
 const sosBtn = document.querySelector('.sos-btn');
 if (sosBtn) {
     sosBtn.addEventListener('click', function() {
@@ -22,7 +16,6 @@ if (sosBtn) {
     });
 }
 
-// Emergency card click placeholder
 const emergencyCards = document.querySelectorAll('.emergency-card');
 emergencyCards.forEach(function(card) {
     card.addEventListener('click', function() {

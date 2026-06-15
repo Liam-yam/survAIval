@@ -1,9 +1,3 @@
-// ============================================
-// survAIval — Profile Script
-// ============================================
-
-// ---- Edit Modal ----
-
 function openEditModal() {
     document.getElementById('modalOverlay').classList.add('open');
     document.getElementById('editModal').classList.add('open');
@@ -15,8 +9,6 @@ function closeEditModal() {
 }
 
 document.getElementById('modalOverlay').addEventListener('click', closeEditModal);
-
-// ---- Photo Preview ----
 
 function previewPhoto(input) {
     if (!input.files || !input.files[0]) return;
@@ -34,8 +26,6 @@ function previewPhoto(input) {
     reader.readAsDataURL(input.files[0]);
 }
 
-// ---- Time Format — localStorage ----
-
 var timeFormatSelect = document.getElementById('timeFormat');
 
 if (timeFormatSelect) {
@@ -46,8 +36,6 @@ if (timeFormatSelect) {
 function saveTimeFormat(value) {
     localStorage.setItem('time_format', value);
 }
-
-// ---- SOS Confirmation ----
 
 document.querySelector('.sos-btn').addEventListener('click', function () {
     if (window.confirm("Are you sure you want to send an SOS alert?")) {

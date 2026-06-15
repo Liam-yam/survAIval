@@ -1,28 +1,19 @@
-// ============================================
-// survAIval — Incident Map Script
-// ============================================
-
 var activeIndex = null;
 
-// ---- Highlight incident on click ----
-
 function highlightIncident(index, status) {
-    // Remove highlight from previous
+
     var items = document.querySelectorAll('.incident-item');
     items.forEach(function (item) {
         item.classList.remove('highlighted');
     });
 
-    // Highlight clicked row
     var selected = document.getElementById('incident-' + index);
     if (selected) {
         selected.classList.add('highlighted');
 
-        // Scroll into view if needed
         selected.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Update active dot color based on status
     var activeDot = document.getElementById('activeDot');
     if (activeDot) {
         activeDot.className = 'map-dot pulse-dot';
@@ -31,7 +22,6 @@ function highlightIncident(index, status) {
         if (status === 'resolved')   activeDot.classList.add('dot-green');
     }
 
-    // Show pin label on map
     var location = selected.querySelector('.incident-location');
     var title    = selected.querySelector('.incident-title');
     var pinHighlight = document.getElementById('mapPinHighlight');
@@ -47,8 +37,6 @@ function highlightIncident(index, status) {
     activeIndex = index;
 }
 
-// ---- Click outside list to deselect ----
-
 document.addEventListener('click', function (e) {
     var list = document.getElementById('incidentList');
     var pin  = document.getElementById('mapPinHighlight');
@@ -61,8 +49,6 @@ document.addEventListener('click', function (e) {
         activeIndex = null;
     }
 });
-
-// ---- SOS Confirmation ----
 
 document.querySelector('.sos-btn').addEventListener('click', function () {
     if (window.confirm("Are you sure you want to send an SOS alert?")) {

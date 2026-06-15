@@ -13,7 +13,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
-/* SIDEBAR */
 .sidebar { width: 260px; min-height: 100vh; background-color: var(--sidebar-bg); display: flex; flex-direction: column; padding: 25px 20px; position: fixed; top: 0; left: 0; bottom: 0; }
 .sidebar-logo img { height: 50px; width: auto; margin-bottom: 25px; }
 .user-card { background-color: var(--primary-green); border-radius: 16px; padding: 18px; margin-bottom: 30px; color: #fff; }
@@ -30,7 +29,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .sidebar-logout a { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--primary-green); text-decoration: none; padding: 10px 14px; border-radius: 10px; transition: background-color 0.2s, color 0.2s; }
 .sidebar-logout a:hover { background-color: #f8d7da; color: #721c24; }
 
-/* MAIN CONTENT */
 .main-content { margin-left: 260px; flex: 1; padding: 30px 35px; }
 
 .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -51,9 +49,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 .alert-error   { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-/* ============================================
-   PROFILE LAYOUT
-   ============================================ */
 .profile-layout {
     display: grid;
     grid-template-columns: 320px 1fr;
@@ -67,9 +62,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     margin-bottom: 20px;
 }
 
-/* ============================================
-   LEFT — ACCOUNT PROFILE CARD
-   ============================================ */
 .profile-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -78,7 +70,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     align-items: center; text-align: center;
 }
 
-/* Avatar */
 .avatar-wrap { margin-bottom: 12px; }
 
 .avatar-letter {
@@ -106,7 +97,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     color: var(--text-dark); margin-bottom: 20px;
 }
 
-/* Info rows */
 .profile-info { width: 100%; margin-bottom: 24px; }
 
 .info-row {
@@ -134,14 +124,8 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .edit-btn:hover { background-color: #d6ecd2; }
 
-/* ============================================
-   RIGHT COLUMN
-   ============================================ */
 .right-column { display: flex; flex-direction: column; gap: 20px; }
 
-/* ============================================
-   PLATFORM CARD
-   ============================================ */
 .platform-card {
     background-color: var(--card-bg);
     border-radius: 20px;
@@ -154,7 +138,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
     gap: 30px;
 }
 
-/* Preferences */
 .pref-group { margin-bottom: 18px; }
 
 .pref-label {
@@ -180,7 +163,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .pref-note { font-size: 11px; color: var(--text-muted); margin-top: 5px; font-style: italic; }
 
-/* Action Log */
 .platform-right { border-left: 1px solid var(--border); padding-left: 24px; }
 
 .log-item {
@@ -204,9 +186,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .no-log { font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px 0; }
 
-/* ============================================
-   EDIT MODAL
-   ============================================ */
 .modal-overlay {
     display: none; position: fixed;
     inset: 0; background-color: rgba(0,0,0,0.4); z-index: 100;
@@ -233,7 +212,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 
 .modal-body { padding: 24px; }
 
-/* Photo Upload */
 .photo-upload-wrap {
     display: flex; flex-direction: column;
     align-items: center; gap: 12px;
@@ -258,7 +236,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 .photo-upload-btn:hover { background-color: #d6ecd2; }
 .photo-upload-btn input { display: none; }
 
-/* Form */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 7px; }
@@ -289,7 +266,6 @@ body { display: flex; min-height: 100vh; background-color: var(--main-bg); }
 }
 .submit-btn:hover { background-color: var(--primary-hover); }
 
-/* RESPONSIVE */
 @media (max-width: 1024px) {
     .profile-layout  { grid-template-columns: 1fr; }
     .platform-layout { grid-template-columns: 1fr; }

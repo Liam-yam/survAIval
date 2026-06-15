@@ -9,9 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['action'])) {
 
 $action = $_POST['action'];
 
-// ============================================
-// SIGNUP
-// ============================================
 if ($action === 'signup') {
     $_SESSION['active_tab'] = 'signup';
 
@@ -26,7 +23,6 @@ if ($action === 'signup') {
     $password     = $_POST['password']         ?? '';
     $confirm_p    = $_POST['confirm_password'] ?? '';
 
-    // Save inputs so form repopulates on error
     $_SESSION['form_data'] = [
         'fname'        => $fname,
         'mname'        => $mname,
@@ -38,7 +34,6 @@ if ($action === 'signup') {
         'email'        => $email,
     ];
 
-    // Check empty fields
     if (empty($fname) || empty($lname) || empty($gender) || empty($cellphone_no) ||
         empty($barangay) || empty($city) || empty($email) || empty($password)) {
         $_SESSION['error_message'] = "Please fill in all required fields.";
@@ -46,14 +41,12 @@ if ($action === 'signup') {
         exit();
     }
 
-    // Check passwords match
     if ($password !== $confirm_p) {
         $_SESSION['error_message'] = "Passwords do not match!";
         header("Location: registration.php");
         exit();
     }
 
-    // Check if email already exists
     $check = mysqli_query($conn, "SELECT user_id FROM tblusers WHERE email = '$email'");
     if (mysqli_num_rows($check) > 0) {
         $_SESSION['error_message'] = "That email is already registered. Try logging in.";
@@ -61,7 +54,6 @@ if ($action === 'signup') {
         exit();
     }
 
-    // Hash password and insert
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
     $mname_val = !empty($mname) ? "'$mname'" : "NULL";
 
@@ -82,9 +74,6 @@ if ($action === 'signup') {
     exit();
 }
 
-// ============================================
-// LOGIN
-// ============================================
 elseif ($action === 'login') {
     $_SESSION['active_tab'] = 'login';
 
@@ -93,14 +82,12 @@ elseif ($action === 'login') {
 
     $_SESSION['form_data'] = ['email' => $email];
 
-    // Check empty fields
     if (empty($email) || empty($password)) {
         $_SESSION['error_message'] = "Please enter your email and password.";
         header("Location: registration.php");
         exit();
     }
 
-    // Find user
     $result = mysqli_query($conn, "SELECT * FROM tblusers WHERE email = '$email'");
     $user   = mysqli_fetch_assoc($result);
 
@@ -110,7 +97,6 @@ elseif ($action === 'login') {
         exit();
     }
 
-    // Set session — now includes barangay and city
     unset($_SESSION['form_data'], $_SESSION['active_tab']);
     $_SESSION['user_id']       = $user['user_id'];
     $_SESSION['user_fname']    = $user['fname'];

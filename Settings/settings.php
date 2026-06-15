@@ -10,15 +10,12 @@ require_once '../Registration/db.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Get full user info
 $user_result = mysqli_query($conn, "SELECT * FROM tblusers WHERE user_id = '$user_id'");
 $user        = mysqli_fetch_assoc($user_result);
 
-// Name prefix based on gender
 $prefix   = ($user['gender'] === 'Female') ? 'Ms.' : 'Mr.';
 $fullname = $prefix . ' ' . $user['fname'] . ' ' . $user['lname'];
 
-// Flash messages
 $success_message = $_SESSION['success_message'] ?? '';
 $error_message   = $_SESSION['error_message']   ?? '';
 unset($_SESSION['success_message'], $_SESSION['error_message']);
@@ -38,7 +35,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <img src="../assets/logo.svg" alt="survAIval Logo">
@@ -68,7 +64,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <div class="top-header">
@@ -91,7 +86,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             <div class="alert alert-error"><?php echo $error_message; ?></div>
         <?php endif; ?>
 
-        <!-- USER PROFILE -->
         <div class="settings-card">
             <p class="card-label">USER PROFILE</p>
 
@@ -120,7 +114,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             </button>
         </div>
 
-        <!-- SYSTEM NOTIFICATION -->
         <div class="settings-card">
             <p class="card-label">SYSTEM NOTIFICATION</p>
 
@@ -187,7 +180,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             </div>
         </div>
 
-        <!-- SECURITY -->
         <div class="settings-card">
             <p class="card-label">SECURITY</p>
 
@@ -220,7 +212,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 
     </main>
 
-    <!-- BARANGAY MODAL -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeBarangayModal()"></div>
     <div class="modal" id="barangayModal">
         <div class="modal-header">

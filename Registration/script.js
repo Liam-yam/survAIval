@@ -1,7 +1,3 @@
-/**
- * Toggles visibility between the Sign Up and Log In forms
- * @param {string} type - Expects 'signup' or 'login'
- */
 function switchTab(type) {
     const signupForm = document.getElementById('signup-form');
     const loginForm = document.getElementById('login-form');

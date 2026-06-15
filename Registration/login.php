@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
             header("Location: registration.php");
             exit();
         } else {
-            
+
             $_SESSION['success_message'] = "Account successfully created for " . $fullname . "!";
             unset($_SESSION['form_data']);
             header("Location: registration.php");
@@ -25,10 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 
     } elseif ($_POST['action'] === 'login') {
         $_SESSION['active_tab'] = "login";
-        
+
         $email = htmlspecialchars($_POST['email'] ?? '');
 
-        
         $_SESSION['success_message'] = "Logged in successfully as " . $email . "!";
         unset($_SESSION['form_data']);
         header("Location: registration.php");

@@ -1,9 +1,3 @@
-// ============================================
-// survAIval — Hotlines Script
-// ============================================
-
-// ---- Search Filter ----
-
 document.getElementById('searchInput').addEventListener('input', function () {
     var query    = this.value.toLowerCase().trim();
     var rows     = document.querySelectorAll('.hotline-row');
@@ -23,19 +17,15 @@ document.getElementById('searchInput').addEventListener('input', function () {
     noResult.style.display = visible === 0 ? 'block' : 'none';
 });
 
-// ---- Copy Number ----
-
 function copyNumber(number, btn) {
     navigator.clipboard.writeText(number).then(function () {
-        // Change icon temporarily
+
         var icon = btn.querySelector('i');
         icon.className = 'bi bi-check-lg';
         btn.classList.add('copied');
 
-        // Show toast
         showToast();
 
-        // Reset after 2s
         setTimeout(function () {
             icon.className = 'bi bi-clipboard';
             btn.classList.remove('copied');
@@ -50,8 +40,6 @@ function showToast() {
         toast.classList.remove('show');
     }, 2000);
 }
-
-// ---- Call Confirmation Modal ----
 
 function confirmCall(name, number, tel) {
     document.getElementById('modalTitle').textContent  = name;
@@ -68,8 +56,6 @@ function closeModal() {
 }
 
 document.getElementById('modalOverlay').addEventListener('click', closeModal);
-
-// ---- SOS Confirmation ----
 
 document.querySelector('.sos-btn').addEventListener('click', function () {
     if (window.confirm("Are you sure you want to send an SOS alert?")) {

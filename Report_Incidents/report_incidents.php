@@ -12,19 +12,16 @@ $user_id    = $_SESSION['user_id'];
 $user_fname = $_SESSION['user_fname'];
 $user_lname = $_SESSION['user_lname'];
 
-// Flash messages
 $success_message = $_SESSION['success_message'] ?? '';
 $error_message   = $_SESSION['error_message']   ?? '';
 unset($_SESSION['success_message'], $_SESSION['error_message']);
 
-// Load this user's drafts for the popup
 $drafts = [];
 $draft_result = mysqli_query($conn, "SELECT * FROM tblreports WHERE user_id = '$user_id' AND status = 'draft' ORDER BY updated_at DESC");
 while ($row = mysqli_fetch_assoc($draft_result)) {
     $drafts[] = $row;
 }
 
-// Pre-fill from dashboard emergency card click
 $prefill_titles = [
     'Fire'    => 'Fire Incident',
     'Flood'   => 'Flood Incident',
@@ -41,7 +38,6 @@ if (isset($_GET['type']) && in_array($_GET['type'], $allowed_types)) {
     $prefill_title = $prefill_titles[$prefill_type];
 }
 
-// Current date
 $date_today = date('l, F j, Y');
 ?>
 <!DOCTYPE html>
@@ -59,9 +55,6 @@ $date_today = date('l, F j, Y');
 </head>
 <body>
 
-    <!-- ================================ -->
-    <!-- SIDEBAR                          -->
-    <!-- ================================ -->
     <aside class="sidebar">
 
         <div class="sidebar-logo">
@@ -111,12 +104,8 @@ $date_today = date('l, F j, Y');
 
     </aside>
 
-    <!-- ================================ -->
-    <!-- MAIN CONTENT                     -->
-    <!-- ================================ -->
     <main class="main-content">
 
-        <!-- Top Header -->
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
@@ -128,10 +117,8 @@ $date_today = date('l, F j, Y');
             </div>
         </div>
 
-        <!-- Page Title -->
         <h1 class="page-title">Incident Report</h1>
 
-        <!-- Flash Messages -->
         <?php if (!empty($success_message)): ?>
             <div class="alert alert-success"><?php echo $success_message; ?></div>
         <?php endif; ?>
@@ -139,10 +126,8 @@ $date_today = date('l, F j, Y');
             <div class="alert alert-error"><?php echo $error_message; ?></div>
         <?php endif; ?>
 
-        <!-- Report Form Card -->
         <div class="form-card">
 
-            <!-- Card Top Row -->
             <div class="card-top-row">
                 <h2 class="card-section-title">Report Details</h2>
                 <button class="drafts-btn" id="draftsBtn" title="Saved Drafts">
@@ -155,13 +140,11 @@ $date_today = date('l, F j, Y');
 
             <form id="reportForm" method="POST" action="report_process.php" enctype="multipart/form-data">
 
-                <!-- Hidden: draft ID for updating existing draft -->
                 <input type="hidden" name="report_id" id="report_id" value="">
                 <input type="hidden" name="action"    id="formAction" value="">
 
                 <div class="form-layout">
 
-                    <!-- LEFT COLUMN -->
                     <div class="form-left">
 
                         <div class="form-group">
@@ -195,7 +178,6 @@ $date_today = date('l, F j, Y');
 
                     </div>
 
-                    <!-- RIGHT COLUMN -->
                     <div class="form-right">
 
                         <div class="form-group">
@@ -216,14 +198,12 @@ $date_today = date('l, F j, Y');
                             </select>
                         </div>
 
-                        <!-- Map Placeholder -->
                         <div class="map-placeholder">
                             <i class="bi bi-map"></i>
                             <p>Map will load here</p>
                             <span>Brgy. Sta. Cruz — live pins</span>
                         </div>
 
-                        <!-- Photo Upload -->
                         <div class="form-group">
                             <label>Upload Photos/Videos</label>
                             <div class="upload-area" id="uploadArea">
@@ -232,7 +212,7 @@ $date_today = date('l, F j, Y');
                                 <input type="file" name="photo" id="photoInput"
                                        accept="image/*,video/*" multiple>
                             </div>
-                            <!-- Photo Preview Gallery -->
+
                             <div class="photo-preview-grid" id="photoPreviewGrid"></div>
                         </div>
 
@@ -240,7 +220,6 @@ $date_today = date('l, F j, Y');
 
                 </div>
 
-                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="button" class="btn-submit" onclick="submitReport()">Submit Report</button>
                     <button type="button" class="btn-draft"  onclick="saveDraft()">Save as Draft</button>
@@ -251,9 +230,6 @@ $date_today = date('l, F j, Y');
 
     </main>
 
-    <!-- ================================ -->
-    <!-- DRAFTS POPUP                     -->
-    <!-- ================================ -->
     <div class="drafts-overlay" id="draftsOverlay" onclick="closeDrafts()"></div>
     <div class="drafts-panel" id="draftsPanel">
         <div class="drafts-header">
@@ -280,7 +256,6 @@ $date_today = date('l, F j, Y');
         </div>
     </div>
 
-    <!-- Pass drafts data to JS -->
     <script>
         const userDrafts = <?php echo json_encode($drafts); ?>;
     </script>

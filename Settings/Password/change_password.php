@@ -28,7 +28,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <img src="../../assets/logo.svg" alt="survAIval Logo">
@@ -58,7 +57,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <div class="top-header">
@@ -72,14 +70,12 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             </div>
         </div>
 
-        <!-- Back Button -->
         <a href="../settings.php" class="back-btn">
             <i class="bi bi-arrow-left"></i> Back to Settings
         </a>
 
         <h1 class="page-title">Change Password</h1>
 
-        <!-- Flash Messages -->
         <?php if (!empty($success_message)): ?>
             <div class="alert alert-success"><?php echo $success_message; ?></div>
         <?php endif; ?>
@@ -87,7 +83,6 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             <div class="alert alert-error"><?php echo $error_message; ?></div>
         <?php endif; ?>
 
-        <!-- Change Password Card -->
         <div class="password-card">
 
             <div class="card-icon">

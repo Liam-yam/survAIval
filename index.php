@@ -14,7 +14,6 @@ $user_lname    = $_SESSION['user_lname'];
 $user_barangay = $_SESSION['user_barangay'];
 $user_city     = $_SESSION['user_city'];
 
-// Greeting based on time
 $hour = (int) date('H');
 if ($hour < 12) {
     $greeting = "Good morning";
@@ -24,10 +23,8 @@ if ($hour < 12) {
     $greeting = "Good evening";
 }
 
-// Current date display
 $date_today = date('l, F j, Y');
 
-// Recent incident reports from DB
 $reports_result = mysqli_query($conn, "
     SELECT * FROM tblreports
     WHERE user_id = '$user_id' AND status != 'draft'
@@ -39,7 +36,6 @@ while ($row = mysqli_fetch_assoc($reports_result)) {
     $recent_reports[] = $row;
 }
 
-// Status label + badge class
 function getStatusLabel($status) {
     switch ($status) {
         case 'pending':    return 'Reported';
@@ -83,9 +79,6 @@ function getDotClass($status) {
 
 <body>
 
-    <!-- ================================ -->
-    <!-- SIDEBAR                          -->
-    <!-- ================================ -->
     <aside class="sidebar">
 
         <div class="sidebar-logo">
@@ -138,12 +131,8 @@ function getDotClass($status) {
 
     </aside>
 
-    <!-- ================================ -->
-    <!-- MAIN CONTENT                     -->
-    <!-- ================================ -->
     <main class="main-content">
 
-        <!-- Top Header -->
         <div class="top-header">
             <div class="header-greeting">
                 <h1><?php echo $greeting . ', ' . $user_fname; ?></h1>
@@ -155,13 +144,11 @@ function getDotClass($status) {
             </div>
         </div>
 
-        <!-- Weather Banner (Placeholder) -->
         <div class="weather-banner">
             <i class="bi bi-cloud-sun-fill"></i>
             <span>Weather alert information will appear here.</span>
         </div>
 
-        <!-- Emergency Report Buttons -->
         <p class="section-label">REPORT AN EMERGENCY</p>
         <div class="emergency-grid">
 
@@ -187,10 +174,8 @@ function getDotClass($status) {
 
         </div>
 
-        <!-- Bottom Two Columns -->
         <div class="bottom-grid">
 
-            <!-- My Incident Reports -->
             <div class="card">
                 <h2 class="card-title">
                     <i class="bi bi-list-ul"></i> My incident reports
@@ -226,7 +211,6 @@ function getDotClass($status) {
 
             </div>
 
-            <!-- Announcements (hardcoded until admin is built) -->
             <div class="card">
                 <h2 class="card-title">
                     <i class="bi bi-megaphone-fill"></i> Announcements

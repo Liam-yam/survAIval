@@ -12,11 +12,9 @@ $user_id    = $_SESSION['user_id'];
 $user_fname = $_SESSION['user_fname'];
 $user_lname = $_SESSION['user_lname'];
 
-// Filter by status
 $filter        = $_GET['status'] ?? 'all';
 $date_today    = date('l, F j, Y');
 
-// Build query based on filter
 if ($filter !== 'all') {
     $filter_safe = mysqli_real_escape_string($conn, $filter);
     $sql = "SELECT * FROM tblreports WHERE user_id = '$user_id' AND status = '$filter_safe' ORDER BY created_at DESC";
@@ -30,7 +28,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $reports[] = $row;
 }
 
-// UI label + dot color mapping
 function getStatusLabel($status) {
     switch ($status) {
         case 'pending':    return 'Reported';
@@ -73,9 +70,6 @@ function getDotClass($status) {
 </head>
 <body>
 
-    <!-- ================================ -->
-    <!-- SIDEBAR                          -->
-    <!-- ================================ -->
     <aside class="sidebar">
 
         <div class="sidebar-logo">
@@ -125,12 +119,8 @@ function getDotClass($status) {
 
     </aside>
 
-    <!-- ================================ -->
-    <!-- MAIN CONTENT                     -->
-    <!-- ================================ -->
     <main class="main-content">
 
-        <!-- Top Header -->
         <div class="top-header">
             <div class="header-text">
                 <p class="header-subtitle">Barangay Smart Disaster Risk Monitoring</p>
@@ -142,13 +132,10 @@ function getDotClass($status) {
             </div>
         </div>
 
-        <!-- Page Title -->
         <h1 class="page-title">My Reports</h1>
 
-        <!-- Report List Card -->
         <div class="reports-card">
 
-            <!-- Card Header: Label + Filter -->
             <div class="card-header-row">
                 <p class="review-label">Review</p>
                 <div class="filter-group">
@@ -171,7 +158,6 @@ function getDotClass($status) {
                 </div>
             </div>
 
-            <!-- Scrollable Report List -->
             <div class="report-list">
                 <?php if (empty($reports)): ?>
                     <div class="no-reports">
@@ -182,7 +168,6 @@ function getDotClass($status) {
                     <?php foreach ($reports as $report): ?>
                         <div class="report-row">
 
-                            <!-- Dot + Info -->
                             <div class="report-left">
                                 <span class="dot <?php echo getDotClass($report['status']); ?>"></span>
                                 <div class="report-info">
@@ -194,7 +179,6 @@ function getDotClass($status) {
                                 </div>
                             </div>
 
-                            <!-- Status + Date + Eye -->
                             <div class="report-right">
                                 <div class="report-status-col">
                                     <span class="status-badge <?php echo getStatusClass($report['status']); ?>">
@@ -220,9 +204,6 @@ function getDotClass($status) {
 
     </main>
 
-    <!-- ================================ -->
-    <!-- REPORT DETAIL MODAL              -->
-    <!-- ================================ -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
 
     <div class="modal" id="reportModal">
@@ -232,7 +213,6 @@ function getDotClass($status) {
         </div>
         <div class="modal-body">
 
-            <!-- Details -->
             <div class="modal-details">
                 <div class="detail-row">
                     <span class="detail-label"><i class="bi bi-tag-fill"></i> Type</span>
@@ -256,13 +236,11 @@ function getDotClass($status) {
                 </div>
             </div>
 
-            <!-- Photo -->
             <div id="modalPhotoWrap" class="modal-photo-wrap" style="display:none;">
                 <p class="detail-label"><i class="bi bi-image"></i> Photo</p>
                 <img id="modalPhoto" src="" alt="Incident Photo">
             </div>
 
-            <!-- Status Tracker -->
             <div class="status-tracker">
                 <p class="tracker-title">Status Tracker</p>
                 <div class="tracker-steps">
