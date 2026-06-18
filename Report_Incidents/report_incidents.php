@@ -163,14 +163,23 @@ $date_today = date('l, F j, Y');
                                    value="<?php echo $prefill_title; ?>">
                         </div>
 
-                        <div class="form-group">
+                                                <div class="form-group">
                             <label>Location</label>
                             <div class="location-row">
                                 <input type="text" name="location" id="location"
                                        class="input-field" placeholder="Enter location"
                                        value="<?php echo htmlspecialchars($user_location); ?>">
-                                <span class="location-icon"><i class="bi bi-geo-alt-fill"></i> PLACE</span>
+                                <button type="button" id="locateBtn" class="locate-btn"
+                                        title="Use my current location">
+                                    <i class="bi bi-crosshair"></i> LOCATE
+                                </button>
                             </div>
+                            <input type="hidden" name="latitude"  id="latitude"  value="">
+                            <input type="hidden" name="longitude" id="longitude" value="">
+                            <p class="location-status" id="locationStatus">
+                                <i class="bi bi-info-circle"></i>
+                                <span>No location set. Click LOCATE or pick on the map.</span>
+                            </p>
                         </div>
 
                         <div class="form-group">
@@ -202,10 +211,15 @@ $date_today = date('l, F j, Y');
                             </select>
                         </div>
 
-                        <div class="map-placeholder">
-                            <i class="bi bi-map"></i>
-                            <p>Map will load here</p>
-                            <span>Brgy. <?php echo htmlspecialchars($user_location); ?> - live pins</span>
+                                                <div class="map-preview-card">
+                            <p class="map-preview-label">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Pin the incident location on the map
+                            </p>
+                            <div id="reportMap" class="report-map"></div>
+                            <p class="map-preview-hint">
+                                Click anywhere on the map or drag the pin to set the exact location.
+                            </p>
                         </div>
 
                         <div class="form-group">
@@ -260,9 +274,22 @@ $date_today = date('l, F j, Y');
         </div>
     </div>
 
-    <script>
+        <script>
         const userDrafts = <?php echo json_encode($drafts); ?>;
+        // Default map center: Barangay San Pablo, Sto. Tomas, Batangas
+        window.SURVAIVAL_MAP_CENTER = {
+            lat: 14.1074,
+            lng: 121.1416,
+            label: <?php echo json_encode('Barangay San Pablo, Sto. Tomas, Batangas'); ?>
+        };
     </script>
+
+    <!-- Leaflet (OpenStreetMap) - free, no API key -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script src="script.js"></script>
 </body>
 </html>

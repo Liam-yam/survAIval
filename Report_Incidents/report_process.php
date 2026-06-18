@@ -22,6 +22,11 @@ $incident_title= mysqli_real_escape_string($conn, trim($_POST['incident_title'] 
 $incident_type = mysqli_real_escape_string($conn, trim($_POST['incident_type']  ?? ''));
 $location      = mysqli_real_escape_string($conn, trim($_POST['location']       ?? ''));
 $description   = mysqli_real_escape_string($conn, trim($_POST['description']    ?? ''));
+$latitude_raw  = trim($_POST['latitude']  ?? '');
+$longitude_raw = trim($_POST['longitude'] ?? '');
+
+$latitude  = (is_numeric($latitude_raw))  ? $latitude_raw  : null;
+$longitude = (is_numeric($longitude_raw)) ? $longitude_raw : null;
 
 $photo_path = '';
 if (isset($_FILES['photo']) && $_FILES['photo']['error'][0] === 0) {
@@ -44,7 +49,7 @@ if ($action === 'submit') {
         exit();
     }
 
-    if (!empty($report_id)) {
+        if (!empty($report_id)) {
         $photo_sql = !empty($photo_path) ? ", photo = '$photo_path'" : "";
         $sql = "UPDATE tblreports SET
                     reporter_name  = '$reporter_name',
@@ -53,14 +58,18 @@ if ($action === 'submit') {
                     incident_type  = '$incident_type',
                     location       = '$location',
                     description    = '$description',
+                    latitude       = " . ($latitude  !== null ? "'$latitude'"  : 'NULL') . ",
+                    longitude      = " . ($longitude !== null ? "'$longitude'" : 'NULL') . ",
                     status         = 'pending'
                     $photo_sql
                 WHERE report_id = '$report_id' AND user_id = '$user_id'";
     } else {
+        $lat_sql = $latitude  !== null ? "'$latitude'"  : 'NULL';
+        $lng_sql = $longitude !== null ? "'$longitude'" : 'NULL';
         $sql = "INSERT INTO tblreports
-                    (user_id, reporter_name, contact_number, incident_title, incident_type, location, description, photo, status)
+                    (user_id, reporter_name, contact_number, incident_title, incident_type, location, description, latitude, longitude, photo, status)
                 VALUES
-                    ('$user_id', '$reporter_name', '$contact_number', '$incident_title', '$incident_type', '$location', '$description', '$photo_path', 'pending')";
+                    ('$user_id', '$reporter_name', '$contact_number', '$incident_title', '$incident_type', '$location', '$description', $lat_sql, $lng_sql, '$photo_path', 'pending')";
     }
 
     if (mysqli_query($conn, $sql)) {
@@ -75,7 +84,7 @@ if ($action === 'submit') {
 
 elseif ($action === 'draft') {
 
-    if (!empty($report_id)) {
+        if (!empty($report_id)) {
         $photo_sql = !empty($photo_path) ? ", photo = '$photo_path'" : "";
         $sql = "UPDATE tblreports SET
                     reporter_name  = '$reporter_name',
@@ -84,14 +93,18 @@ elseif ($action === 'draft') {
                     incident_type  = '$incident_type',
                     location       = '$location',
                     description    = '$description',
+                    latitude       = " . ($latitude  !== null ? "'$latitude'"  : 'NULL') . ",
+                    longitude      = " . ($longitude !== null ? "'$longitude'" : 'NULL') . ",
                     status         = 'draft'
                     $photo_sql
                 WHERE report_id = '$report_id' AND user_id = '$user_id'";
     } else {
+        $lat_sql = $latitude  !== null ? "'$latitude'"  : 'NULL';
+        $lng_sql = $longitude !== null ? "'$longitude'" : 'NULL';
         $sql = "INSERT INTO tblreports
-                    (user_id, reporter_name, contact_number, incident_title, incident_type, location, description, photo, status)
+                    (user_id, reporter_name, contact_number, incident_title, incident_type, location, description, latitude, longitude, photo, status)
                 VALUES
-                    ('$user_id', '$reporter_name', '$contact_number', '$incident_title', '$incident_type', '$location', '$description', '$photo_path', 'draft')";
+                    ('$user_id', '$reporter_name', '$contact_number', '$incident_title', '$incident_type', '$location', '$description', $lat_sql, $lng_sql, '$photo_path', 'draft')";
     }
 
     if (mysqli_query($conn, $sql)) {
