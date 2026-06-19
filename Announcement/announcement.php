@@ -19,11 +19,7 @@ $user_location = $user_context['location'];
 
 $date_today = date('l, F j, Y');
 
-/* ------------------------------------------------------------
-   Load announcements visible to this user.
-   Rule: show global posts (barangay IS NULL) + posts for the
-   user's own barangay. Newest first.
------------------------------------------------------------- */
+
 $barangay_safe = mysqli_real_escape_string($conn, $user_barangay);
 
 $sql = "
@@ -42,10 +38,7 @@ if ($result) {
     }
 }
 
-/* ------------------------------------------------------------
-   Categorize a post by scanning title + body for keywords.
-   Returns: icon, color, label (chip text), filter (bucket)
------------------------------------------------------------- */
+
 function announce_meta($title, $body) {
     $haystack = strtolower($title . ' ' . $body);
 
@@ -71,12 +64,7 @@ function announce_meta($title, $body) {
     return ['icon' => 'bi-megaphone-fill', 'color' => 'chip-green', 'label' => 'Notice', 'filter' => 'reminders'];
 }
 
-/* ------------------------------------------------------------
-   Build the Open-Meteo request URL.
-   Open-Meteo is free, requires no API key, and returns daily
-   forecasts by lat/lng. The browser will fetch this directly;
-   we only assemble the URL server-side for safety.
------------------------------------------------------------- */
+
 $weather_query = http_build_query([
     'latitude'      => 14.5995,
     'longitude'     => 120.9842,
@@ -234,7 +222,6 @@ $weather_api_url = 'https://api.open-meteo.com/v1/forecast?' . $weather_query;
                     </span>
                 </div>
 
-                <!-- Skeleton shown until the API responds. JS replaces it. -->
                 <div class="weather-list" id="weatherOutlookList">
                     <div class="weather-row weather-skeleton">
                         <div class="weather-day-group">
@@ -254,7 +241,6 @@ $weather_api_url = 'https://api.open-meteo.com/v1/forecast?' . $weather_query;
     </div>
 </main>
 
-<!-- View modal -->
 <div class="modal-overlay" id="announceOverlay" onclick="closeAnnouncement()"></div>
 <div class="announce-modal" id="announceModal" role="dialog" aria-modal="true">
     <div class="announce-modal-header">
@@ -277,7 +263,6 @@ $weather_api_url = 'https://api.open-meteo.com/v1/forecast?' . $weather_query;
     </div>
 </div>
 
-<!-- Weather config consumed by script.js -->
 <script>
     window.SURVAIVAL_WEATHER = {
         lat: 14.5995,

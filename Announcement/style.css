@@ -29,7 +29,6 @@ body {
     background-color: var(--main-bg);
 }
 
-/* ============ SIDEBAR ============ */
 .sidebar {
     width: 280px;
     min-height: 100vh;
@@ -98,7 +97,6 @@ body {
 
 .sidebar-logout a:hover { background-color: rgba(255, 255, 255, 0.18); }
 
-/* ============ MAIN CONTENT ============ */
 .main-content {
     margin-left: 280px;
     flex: 1;
@@ -140,7 +138,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* ============ LAYOUT (feed + sidebar) ============ */
 .announce-layout {
     display: grid;
     grid-template-columns: 1fr 300px;
@@ -155,7 +152,6 @@ body {
     min-width: 0;
 }
 
-/* ============ TOOLBAR (search + filters) ============ */
 .announce-toolbar {
     background: transparent;
     padding: 0;
@@ -228,7 +224,6 @@ body {
     color: #ffffff;
 }
 
-/* ============ CARD GRID ============ */
 .announce-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -499,7 +494,6 @@ body {
     font-weight: 600;
 }
 
-/* skeleton */
 .weather-skeleton .skel-circle {
     width: 22px;
     height: 22px;
@@ -614,7 +608,7 @@ body {
 
 .announce-modal-body { padding: 22px 24px 26px; overflow-y: auto; }
 
-/* ============ ADMIN-ONLY ADDITIONS ============ */
+
 .add-announcement-btn {
     background-color: var(--primary-green);
     color: #fff;
@@ -778,7 +772,7 @@ body {
     color: #721c24;
 }
 
-/* ============ RESPONSIVE ============ */
+
 @media (max-width: 1100px) {
     .announce-layout { grid-template-columns: 1fr 300px; }
 }

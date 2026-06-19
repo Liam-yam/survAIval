@@ -1,16 +1,6 @@
-// =========================================================
-// Announcement page script
-//  - Search + filter chips for the card grid
-//  - Open-Meteo weather API for the Weather Outlook sidebar
-//  - Modal open/close with full announcement details
-// =========================================================
-
 (function () {
     'use strict';
 
-    /* ====================================================
-       SEARCH + FILTER
-    ==================================================== */
     const searchInput = document.getElementById('announceSearch');
     const filterBar   = document.getElementById('announceFilters');
     const grid        = document.getElementById('announceGrid');
@@ -53,9 +43,6 @@
         });
     }
 
-    /* ====================================================
-       MODAL
-    ==================================================== */
     const overlay   = document.getElementById('announceOverlay');
     const modal     = document.getElementById('announceModal');
     const iconWrap  = document.getElementById('modalIconWrap');
@@ -115,17 +102,6 @@
         }
     });
 
-    /* ====================================================
-       WEATHER API (Open-Meteo)
-       https://api.open-meteo.com/v1/forecast
-       - No API key required
-       - Returns current weather + 3-day daily forecast
-       - weather_code follows WMO codes; we map them to
-         Bootstrap Icons + temperature + risk level
-    ==================================================== */
-
-    // WMO weather codes -> { icon, label, risk }
-    // Source: https://open-meteo.com/en/docs (WMO Weather interpretation codes)
     const WMO_CODES = {
         0:  { icon: 'bi-sun-fill',           label: 'Clear',          risk: 'low' },
         1:  { icon: 'bi-cloud-sun-fill',     label: 'Mainly clear',   risk: 'low' },
@@ -157,7 +133,6 @@
         return WMO_CODES[code] || { icon: 'bi-cloud-fill', label: 'Unknown', risk: 'low' };
     }
 
-    // Map weekday index (0=Sun..6=Sat) to a 3-letter label
     const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     function renderWeather(data, cityLabel) {
@@ -174,7 +149,6 @@
             return;
         }
 
-        // Worst risk across all forecast days (high > moderate > low)
         const riskRank = { low: 0, moderate: 1, high: 2 };
         const riskText = { low: 'Low', moderate: 'Moderate', high: 'High' };
         let worst = 'low';
@@ -183,14 +157,11 @@
             if (riskRank[r] > riskRank[worst]) worst = r;
         });
 
-        // Update the city label if geolocation succeeded
         const loc = document.getElementById('weatherLocation');
         if (loc && cityLabel) {
             loc.innerHTML = '<i class="bi bi-geo-alt-fill"></i> ' + escapeHtml(cityLabel);
         }
 
-        // Build rows: first row = today (1 day), then pair subsequent days
-        // We just render one big row showing all days for simplicity.
         const daysHtml = times.map((iso, i) => {
             const d = new Date(iso);
             const label = DAY_LABELS[d.getDay()];
@@ -252,8 +223,6 @@
         let lng = cfg.lng;
         let label = cfg.cityLabel;
 
-        // Try geolocation for a more accurate forecast. If the user
-        // denies or it's unavailable, fall back to the city default.
         if (navigator.geolocation) {
             try {
                 const pos = await new Promise((resolve, reject) => {
@@ -283,14 +252,11 @@
         }
     }
 
-    // Kick off weather load once the DOM is ready (the script tag is
-    // at the end of <body>, so this fires almost immediately).
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', loadWeather);
     } else {
         loadWeather();
     }
 
-    // Refresh the forecast every 15 minutes while the page is open.
     setInterval(loadWeather, 15 * 60 * 1000);
 })();
