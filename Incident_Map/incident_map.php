@@ -1,3 +1,4 @@
+s
 <?php
 session_start();
 
@@ -233,7 +234,7 @@ function getStatusClass($status) {
             <!-- RIGHT: Map + address search -->
             <div class="map-card">
 
-                <!-- Address search (Google Maps embed) -->
+                <!-- Address search (Nominatim geocoding -> Leaflet map) -->
                 <div class="map-search-bar">
                     <i class="bi bi-search"></i>
                     <input type="text"
@@ -242,6 +243,9 @@ function getStatusClass($status) {
                            autocomplete="off">
                     <button id="searchBtn" class="search-btn">Search</button>
                 </div>
+
+                <!-- Inline status / feedback for the search bar -->
+                <div id="searchStatus" class="search-status" role="status" aria-live="polite"></div>
 
                 <!-- Real Leaflet map -->
                 <div id="incidentMap" class="incident-map"></div>
@@ -257,20 +261,10 @@ function getStatusClass($status) {
 
         </div>
 
-        <!-- Bottom: Google Maps embed of searched/selected address -->
-        <div class="gmap-card" id="gmapCard" style="display:none;">
-            <div class="gmap-header">
-                <p class="gmap-title"><i class="bi bi-geo-alt-fill"></i> <span id="gmapTitle">Searched address</span></p>
-                <button class="gmap-close" onclick="closeGmap()" aria-label="Close"><i class="bi bi-x-lg"></i></button>
-            </div>
-            <iframe id="gmapFrame" class="gmap-frame"
-                    src=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    allowfullscreen></iframe>
-        </div>
-
     </main>
+
+<!-- Toast container for inline feedback -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
     <script>
         window.SURVAIVAL_INCIDENT_MAP = {

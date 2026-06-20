@@ -137,12 +137,13 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
 
     if (!mapEl || typeof L === 'undefined') return;
 
-    function setStatus(kind, message) {
+                        function setStatus(kind, message) {
         if (!statusEl) return;
         statusEl.className = 'location-status ' + (kind || '');
         statusEl.innerHTML = '<i class="bi bi-' +
             (kind === 'success' ? 'check-circle-fill' :
              kind === 'error'   ? 'exclamation-triangle-fill' :
+             kind === 'warn'    ? 'exclamation-circle-fill' :
              kind === 'loading' ? 'hourglass-split' : 'info-circle') +
             '"></i><span>' + message + '</span>';
     }
@@ -159,7 +160,47 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
         attribution: '� OpenStreetMap'
     }).addTo(map);
 
-    var marker = null;
+                    var marker = null;
+    var lastResolved = { lat: null, lng: null };
+    var geocodeToken  = 0; // used to ignore stale reverse-geocode responses
+
+    // Reverse geocode lat/lng -> human-readable address using Nominatim
+    function reverseGeocode(lat, lng) {
+        var myToken = ++geocodeToken;
+        // Show a "resolving" state immediately, but don't overwrite a real address
+        setStatus('loading', 'Resolving address for ' + lat.toFixed(5) + ', ' + lng.toFixed(5) + '…');
+
+        var url = 'https://nominatim.openstreetmap.org/reverse'
+                + '?format=json&lat=' + encodeURIComponent(lat)
+                + '&lon=' + encodeURIComponent(lng)
+                + '&zoom=18&addressdetails=1';
+
+        return fetch(url, {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            // Ignore stale responses from older pin positions
+            if (myToken !== geocodeToken) return null;
+
+            if (!data || data.error) {
+                setStatus('warn', 'Pin set. Could not resolve an address — please type one.');
+                return null;
+            }
+            var address = data.display_name || '';
+            if (locInput && address) {
+                locInput.value = address;
+            }
+            setStatus('success', 'Pin set: ' + address);
+            return address;
+        })
+        .catch(function (err) {
+            if (myToken !== geocodeToken) return null;
+            console.warn('[survAIval] Reverse geocode failed:', err);
+            setStatus('warn', 'Pin set, but address lookup failed. Please type the address.');
+            return null;
+        });
+    }
 
     function setPin(latlng, label) {
         if (!marker) {
@@ -168,7 +209,7 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
                 var p = e.target.getLatLng();
                 latInput.value = p.lat.toFixed(6);
                 lngInput.value = p.lng.toFixed(6);
-                setStatus('success', 'Pin moved to ' + p.lat.toFixed(5) + ', ' + p.lng.toFixed(5));
+                reverseGeocode(p.lat, p.lng);
             });
         } else {
             marker.setLatLng(latlng);
@@ -176,7 +217,10 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
         latInput.value = latlng.lat.toFixed(6);
         lngInput.value = latlng.lng.toFixed(6);
         map.setView(latlng, Math.max(map.getZoom(), 16));
+
         if (label) setStatus('success', label);
+        // Resolve the address and write it into the Location text box
+        reverseGeocode(latlng.lat, latlng.lng);
     }
 
     // Click-to-pin
@@ -198,10 +242,7 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
                 function (pos) {
                     locateBtn.disabled = false;
                     var latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                    setPin(latlng, 'Your current location: ' + latlng.lat.toFixed(5) + ', ' + latlng.lng.toFixed(5));
-                    if (locInput && !locInput.value) {
-                        locInput.value = 'Brgy. San Pablo, Sto. Tomas, Batangas';
-                    }
+                    setPin(latlng, 'Your current location detected.');
                 },
                 function (err) {
                     locateBtn.disabled = false;
@@ -216,6 +257,223 @@ document.querySelector('.sos-btn').addEventListener('click', function () {
         });
     }
 
-    // Initial status
-    setStatus('', 'Click LOCATE to use GPS, or click anywhere on the map to drop a pin.');
+        // Initial status
+    setStatus('', 'Search an address above, click LOCATE, or click anywhere on the map to drop a pin.');
+
+    // ============================================================
+    // LOCATION SEARCH + AUTOCOMPLETE
+    // ============================================================
+    var suggestEl   = document.getElementById('locationSuggest');
+    var spinnerEl   = document.getElementById('locationSpinner');
+    var clearBtnEl  = document.getElementById('locationClear');
+    var searchToken = 0;          // race-guard for autocomplete
+    var debounceId  = null;
+    var suggestions = [];         // current list of result objects
+    var activeIdx   = -1;         // keyboard-highlighted suggestion
+    var lastQuery   = '';
+
+    function setSpinner(on) {
+        if (spinnerEl) spinnerEl.classList.toggle('show', !!on);
+        if (clearBtnEl) clearBtnEl.classList.toggle('show', !!on ? false : !!(locInput && locInput.value));
+    }
+
+    function hideSuggestions() {
+        if (!suggestEl) return;
+        suggestEl.classList.remove('show');
+        suggestEl.innerHTML = '';
+        suggestions = [];
+        activeIdx = -1;
+    }
+
+    function escapeHtml(s) {
+        if (s == null) return '';
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function escapeRegex(s) {
+        return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function highlightMatch(text, query) {
+        if (!query) return escapeHtml(text);
+        var safe = escapeHtml(text);
+        var re   = new RegExp('(' + escapeRegex(query) + ')', 'ig');
+        return safe.replace(re, '<mark>$1</mark>');
+    }
+
+    function renderSuggestions(items, query) {
+        if (!suggestEl) return;
+        if (!items || items.length === 0) {
+            suggestEl.innerHTML = '<li class="loc-empty">No matches found</li>';
+            suggestEl.classList.add('show');
+            return;
+        }
+        suggestEl.innerHTML = items.map(function (it, i) {
+            var parts = it.display_name.split(',');
+            var main  = (parts[0] + (parts[1] ? ', ' + parts[1] : '')).trim() || it.display_name;
+            var rest  = it.display_name;
+            return '<li class="loc-item" role="option" data-idx="' + i + '" tabindex="-1">'
+                 + '<i class="bi bi-geo-alt-fill"></i>'
+                 + '<div class="loc-text">'
+                 +   '<div class="loc-main">' + highlightMatch(main, query) + '</div>'
+                 +   '<div class="loc-sub">'  + highlightMatch(rest,  query) + '</div>'
+                 + '</div>'
+                 + '</li>';
+        }).join('');
+        suggestEl.classList.add('show');
+    }
+
+    function setActiveSuggestion(idx) {
+        if (!suggestEl) return;
+        var items = suggestEl.querySelectorAll('.loc-item');
+        items.forEach(function (el, i) {
+            el.classList.toggle('active', i === idx);
+            if (i === idx) el.scrollIntoView({ block: 'nearest' });
+        });
+        activeIdx = idx;
+    }
+
+    function pickSuggestion(idx) {
+        var it = suggestions[idx];
+        if (!it) return;
+        var lat = parseFloat(it.lat);
+        var lng = parseFloat(it.lon);
+        if (!isFinite(lat) || !isFinite(lng)) return;
+
+        if (locInput) locInput.value = it.display_name;
+        setSpinner(false);
+        hideSuggestions();
+        setPin({ lat: lat, lng: lng }, 'Selected: ' + it.display_name);
+    }
+
+    function runSearch(query) {
+        query = (query || '').trim();
+        lastQuery = query;
+        if (query.length < 3) {
+            hideSuggestions();
+            setSpinner(false);
+            return;
+        }
+
+        var myToken = ++searchToken;
+        setSpinner(true);
+
+        // Build a bounded viewbox around the user's barangay so results stay local.
+        var center = (config && isFinite(config.lat) && isFinite(config.lng))
+                   ? { lat: config.lat, lng: config.lng }
+                   : { lat: 14.1074,    lng: 121.1416 };
+        var dLat = 0.05;
+        var dLng = 0.05;
+        var viewbox = (center.lng - dLng) + ',' +
+                      (center.lat + dLat) + ',' +
+                      (center.lng + dLng) + ',' +
+                                            (center.lat - dLat);
+
+        var url = 'https://nominatim.openstreetmap.org/search'
+                + '?format=json&addressdetails=1&limit=6'
+                + '&countrycodes=ph'
+                + '&viewbox=' + encodeURIComponent(viewbox)
+                + '&bounded=1'
+                + '&q=' + encodeURIComponent(query);
+
+        fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (myToken !== searchToken) return;
+            suggestions = Array.isArray(data) ? data : [];
+            renderSuggestions(suggestions, lastQuery);
+            setSpinner(false);
+        })
+        .catch(function (err) {
+            if (myToken !== searchToken) return;
+            console.warn('[survAIval] Autocomplete search failed:', err);
+            setSpinner(false);
+            hideSuggestions();
+            setStatus('warn', 'Address search failed. Check your network and try again.');
+        });
+    }
+
+    if (locInput) {
+        locInput.addEventListener('input', function () {
+            if (clearBtnEl) clearBtnEl.classList.toggle('show', !!locInput.value);
+            if (debounceId) clearTimeout(debounceId);
+            debounceId = setTimeout(function () { runSearch(locInput.value); }, 350);
+        });
+
+        locInput.addEventListener('keydown', function (e) {
+            var open = suggestEl && suggestEl.classList.contains('show');
+            var itemCount = suggestEl ? suggestEl.querySelectorAll('.loc-item').length : 0;
+
+            if (e.key === 'ArrowDown') {
+                if (!open) return;
+                e.preventDefault();
+                setActiveSuggestion(Math.min(activeIdx + 1, itemCount - 1));
+            } else if (e.key === 'ArrowUp') {
+                if (!open) return;
+                e.preventDefault();
+                setActiveSuggestion(Math.max(activeIdx - 1, 0));
+            } else if (e.key === 'Enter') {
+                if (open && activeIdx >= 0 && suggestions[activeIdx]) {
+                    e.preventDefault();
+                    pickSuggestion(activeIdx);
+                } else if (locInput.value.trim().length >= 3) {
+                    e.preventDefault();
+                    if (debounceId) clearTimeout(debounceId);
+                    runSearch(locInput.value);
+                }
+            } else if (e.key === 'Escape') {
+                hideSuggestions();
+            }
+        });
+
+        locInput.addEventListener('focus', function () {
+            if (locInput.value.trim().length >= 3 && suggestions.length > 0) {
+                renderSuggestions(suggestions, lastQuery);
+            }
+        });
+
+        locInput.addEventListener('blur', function () {
+            // delay so a click on a suggestion still registers
+            setTimeout(function () { hideSuggestions(); }, 180);
+        });
+    }
+
+    if (suggestEl) {
+        suggestEl.addEventListener('mousedown', function (e) {
+            var li = e.target.closest('.loc-item');
+            if (!li) return;
+            e.preventDefault();
+            var idx = parseInt(li.getAttribute('data-idx'), 10);
+            if (!isNaN(idx)) pickSuggestion(idx);
+        });
+
+        suggestEl.addEventListener('mousemove', function (e) {
+            var li = e.target.closest('.loc-item');
+            if (!li) return;
+            var idx = parseInt(li.getAttribute('data-idx'), 10);
+            if (!isNaN(idx)) setActiveSuggestion(idx);
+        });
+    }
+
+    if (clearBtnEl) {
+        clearBtnEl.addEventListener('click', function () {
+            if (!locInput) return;
+            locInput.value = '';
+            hideSuggestions();
+            clearBtnEl.classList.remove('show');
+            locInput.focus();
+            setStatus('', 'Location cleared. Search, click LOCATE, or pick on the map.');
+        });
+    }
+
+    // Hide suggestions when clicking outside the search wrapper
+    document.addEventListener('click', function (e) {
+        var wrap = document.querySelector('.location-search');
+        if (wrap && !wrap.contains(e.target)) hideSuggestions();
+    });
 })();

@@ -165,10 +165,20 @@ $date_today = date('l, F j, Y');
 
                                                 <div class="form-group">
                             <label>Location</label>
-                            <div class="location-row">
-                                <input type="text" name="location" id="location"
-                                       class="input-field" placeholder="Enter location"
-                                       value="<?php echo htmlspecialchars($user_location); ?>">
+                                                        <div class="location-row">
+                                <div class="location-search">
+                                    <i class="bi bi-search location-search-icon"></i>
+                                    <input type="text" name="location" id="location"
+                                           class="input-field location-input"
+                                           placeholder="Search an address or place..."
+                                           autocomplete="off"
+                                           value="<?php echo htmlspecialchars($user_location); ?>">
+                                    <span id="locationSpinner" class="location-spinner" aria-hidden="true"></span>
+                                    <button type="button" id="locationClear" class="location-clear" aria-label="Clear search" title="Clear">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <ul id="locationSuggest" class="location-suggest" role="listbox" aria-label="Address suggestions"></ul>
+                                </div>
                                 <button type="button" id="locateBtn" class="locate-btn"
                                         title="Use my current location">
                                     <i class="bi bi-crosshair"></i> LOCATE
@@ -178,7 +188,7 @@ $date_today = date('l, F j, Y');
                             <input type="hidden" name="longitude" id="longitude" value="">
                             <p class="location-status" id="locationStatus">
                                 <i class="bi bi-info-circle"></i>
-                                <span>No location set. Click LOCATE or pick on the map.</span>
+                                <span>No location set. Search, click LOCATE, or pick on the map.</span>
                             </p>
                         </div>
 
