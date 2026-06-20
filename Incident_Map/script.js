@@ -140,12 +140,13 @@
         }
     });
 
-    // ---------- Google Maps address search (embed) ----------
+    // ---------- Address search → geocode + pan Leaflet + Google Maps embed ----------
     var addressInput = document.getElementById('addressSearch');
     var searchBtn    = document.getElementById('searchBtn');
     var gmapCard     = document.getElementById('gmapCard');
     var gmapFrame    = document.getElementById('gmapFrame');
     var gmapTitle    = document.getElementById('gmapTitle');
+    var searchMarker = null; // temporary marker for searched address
 
     function searchAddress() {
         var q = (addressInput.value || '').trim();
@@ -153,12 +154,68 @@
 
         // Bias results to the Philippines + current barangay
         var fullQuery = q + ', ' + (config.label || 'Sto. Tomas, Batangas, Philippines');
-        var url = 'https://www.google.com/maps?q=' + encodeURIComponent(fullQuery) + '&output=embed';
 
+        // 1) Update the Google Maps embed iframe (existing behavior)
+        var url = 'https://www.google.com/maps?q=' + encodeURIComponent(fullQuery) + '&output=embed';
         gmapTitle.textContent = q;
         gmapFrame.src = url;
         gmapCard.style.display = 'block';
         gmapCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // 2) Geocode via Nominatim and point the Leaflet map to it
+        var nominatimUrl = 'https://nominatim.openstreetmap.org/search'
+                         + '?format=json&limit=1'
+                         + '&countrycodes=ph'
+                         + '&q=' + encodeURIComponent(fullQuery);
+
+        fetch(nominatimUrl, {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (!data || data.length === 0) {
+                console.warn('[survAIval] No geocoding result for:', fullQuery);
+                return;
+            }
+            var lat = parseFloat(data[0].lat);
+            var lng = parseFloat(data[0].lon);
+
+            // Pan/zoom the Leaflet map
+            map.flyTo([lat, lng], 17, { duration: 1.0 });
+
+            // Drop / move a temporary search marker
+            if (searchMarker) {
+                searchMarker.setLatLng([lat, lng]);
+            } else {
+                searchMarker = L.marker([lat, lng], {
+                    icon: L.divIcon({
+                        html: '<div style="'
+                            + 'width:18px;height:18px;'
+                            + 'background:#2563eb;'
+                            + 'border:3px solid #fff;'
+                            + 'border-radius:50%;'
+                            + 'box-shadow:0 2px 6px rgba(0,0,0,0.5);'
+                            + '"></div>',
+                        className: 'search-marker',
+                        iconSize: [18, 18],
+                        iconAnchor: [9, 9]
+                    })
+                }).addTo(map);
+
+                searchMarker.bindPopup(
+                    '<div class="incident-popup">'
+                    + '<div class="popup-type">SEARCH RESULT</div>'
+                    + '<div class="popup-title">' + escapeHtml(q) + '</div>'
+                    + '<div class="popup-loc"><i class="bi bi-geo-alt-fill"></i> '
+                    +   escapeHtml(fullQuery) + '</div>'
+                    + '</div>'
+                );
+            }
+            searchMarker.openPopup();
+        })
+        .catch(function (err) {
+            console.error('[survAIval] Geocoding failed:', err);
+        });
     }
 
     if (searchBtn)    searchBtn.addEventListener('click', searchAddress);
